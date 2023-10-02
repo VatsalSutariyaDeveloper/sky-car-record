@@ -5,11 +5,10 @@ import Login from "./components/Login";
 
 const App = () => (
   <>
-   <Routes>
-      <Route path="/" element={<Navbar />}>
-        <Route index element={<Hero />} />
-        <Route path="login" element={<Login />} />
-      </Route>
+    <Navbar />
+    <Routes>
+      <Route index element={<Hero />} />
+      <Route path="login" element={<Login />} />
     </Routes>
   </>
 );
