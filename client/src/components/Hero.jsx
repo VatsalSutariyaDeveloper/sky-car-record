@@ -6,6 +6,7 @@ import '../index.css'
 const Hero = () => {
 
   return (
+    
     <div className={`bg-primary ${styles.flexStart}`}>
       <div className={`${styles.boxWidth}`}>
         <section id='home' className={`md:flex-row flex-col ${styles.paddingY}`}>
