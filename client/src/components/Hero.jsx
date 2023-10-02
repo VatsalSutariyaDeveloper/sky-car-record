@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from '../style'
 import { date, deletebtn, edit } from '../assets'
-
+import '../index.css'
 
 const Hero = () => {
 
@@ -22,10 +22,8 @@ const Hero = () => {
                       </td>
                       <td>
                         <div className='flex justify-end mr-2'>
-                          <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:animate-vibration' />
-
-                          {/* <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer' /> */}
-                          <img src={deletebtn} alt="delete image" className='w-7 cursor-pointer' />
+                          <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:w-8' />
+                          <img src={deletebtn} alt="delete image" className='w-7 cursor-pointer hover:w-8' />
                         </div>
                       </td>
                     </tr>
