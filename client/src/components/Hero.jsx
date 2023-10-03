@@ -2,6 +2,7 @@ import React from 'react'
 import styles from '../style'
 import { date, deletebtn, edit, addcarbooking } from '../assets'
 import '../index.css'
+import { Link } from 'react-router-dom'
 
 const Hero = () => {
 
@@ -13,12 +14,14 @@ const Hero = () => {
             <div className={`${styles.flexCenter} flex-col xl:px-0 sm:px-16`}>
               <div className='flex items-center pb-6 ml-[255px]'>
                 <div className='-ml-[270px] mx-2'>
-                  <div className='p-[8px] lg:px-4 bg-black-gradient rounded-full lg:rounded-lg'>
-                    <div className='flex items-center cursor-pointer' id='addbookingbtn'>
-                      <img src={addcarbooking} alt="addcarbooking" className='w-7 lg:w-5' />
-                      <span className='hidden lg:inline ml-2 text-white'>New Booking</span>
+                  <Link to="/add-booking">
+                    <div className='p-[8px] lg:px-4 bg-black-gradient rounded-full lg:rounded-lg'>
+                      <div className='flex items-center cursor-pointer' id='addbookingbtn'>
+                        <img src={addcarbooking} alt="addcarbooking" className='w-7 lg:w-5' />
+                        <span className='hidden lg:inline ml-2 text-white'>New Booking</span>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </div>
                 <input className="text-sm px-4 py-2 w-[280px] lg:w-[500px] border border-solid border-gray-300 rounded" type="search" placeholder="Search" />
               </div>

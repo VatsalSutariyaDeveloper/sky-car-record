@@ -14,16 +14,17 @@ exports.index = async (req, res) => {
 };
 
 exports.store = async (req, res) => {
-  const { fullName, email, phoneNumber, course, hobbies, gender } = req.body;
+  const { client_name, dealer_name, car_name, number_plate, price, destination, booking_date, return_date } = req.body;
 
   const carBookingData = {
-    fullName: fullName || '',
-    email: email || '',
-    phoneNumber: phoneNumber || '',
-    course: course || '',
-    hobbies: hobbies || '',
-    gender: gender || '',
-    profileImage: req.file ? req.file.filename : '', // Store the new file name in the database
+    client_name: client_name,
+    dealer_name: dealer_name,
+    car_name: car_name,
+    number_plate: number_plate,
+    price: price,
+    destination: destination,
+    booking_date: booking_date,
+    return_date: return_date,
   };
 
   try {
