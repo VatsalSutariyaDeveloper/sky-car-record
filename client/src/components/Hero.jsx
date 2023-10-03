@@ -2,12 +2,12 @@ import React from 'react'
 import styles from '../style'
 import { date, deletebtn, edit, addcarbooking } from '../assets'
 import '../index.css'
+import { Link } from 'react-router-dom'
 
 const Hero = () => {
 
   return (
     <>
-
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <section id='home' className={`md:flex-row flex-col ${styles.paddingY}`}>
@@ -15,10 +15,12 @@ const Hero = () => {
               <div className='flex items-center pb-6 ml-[255px]'>
                 <div className='-ml-[270px] mx-2'>
                   <div className='p-2 lg:px-4 bg-black-gradient rounded-full'>
-                    <div className='flex items-center cursor-pointer'>
-                      <img src={addcarbooking} alt="addcarbooking" className='w-7 lg:w-5' />
-                      <span className='hidden lg:inline ml-2 text-white'>New Booking</span>
-                    </div>
+                    <Link to="/car-booking">
+                      <div className='flex items-center cursor-pointer'>
+                        <img src={addcarbooking} alt="addcarbooking" className='w-7 lg:w-5' />
+                        <span className='hidden lg:inline ml-2 text-white'>New Booking</span>
+                      </div>
+                    </Link>
                   </div>
 
                 </div>
