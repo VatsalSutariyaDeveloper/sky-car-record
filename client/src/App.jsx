@@ -1,20 +1,6 @@
 import { Navbar, Hero } from "./components";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Login from "./components/Login";
-<<<<<<< HEAD
-import BookingForm from "./components/BookingForm.jsx";
-
-const App = () => (
-  <>
-    <Navbar />
-    <Routes>
-      <Route index element={<Hero />} />
-      <Route path="car-booking" element={<BookingForm />} />
-      <Route path="login" element={<Login />} />
-    </Routes>
-  </>
-);
-=======
 import CreateBooking from "./components/BookUser/CreateBooking"
 import UpdateBooking from "./components/BookUser/UpdateBooking"
 
@@ -37,6 +23,5 @@ const App = () => {
     </>
   );
 };
->>>>>>> 5b3c28725b3ac2bc0465820ce0dfcab8f2e7b2ae
 
 export default App;

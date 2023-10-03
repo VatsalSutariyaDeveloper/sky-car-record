@@ -15,42 +15,6 @@ class CarBookingForm extends Component {
         };
     }
 
-    handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(this.state.destination)
-        const formData = {
-            client_name: this.state.client_name,
-            dealer_name: this.state.dealer_name,
-            car_name: this.state.car_name,
-            number_plate: this.state.number_plate,
-            price: this.state.price,
-            destination: this.state.destination,
-            booking_date: this.state.booking_date,
-            return_date: this.state.return_date
-        };
-
-        // Send the formData to the server
-        fetch('http://localhost:3000/car-booking', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Handle the response from the server
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-
-    handleChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({ [name]: value });
-    }
 
     render() {
         return (
