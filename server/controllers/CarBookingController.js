@@ -1,4 +1,4 @@
-const CarBooking = require('../schama/CarBookingSchama');
+const CarBooking = require('../schema/CarBookingSchema');
 const constant = require('../config/Constant');
 
 exports.index = async (req, res) => {
