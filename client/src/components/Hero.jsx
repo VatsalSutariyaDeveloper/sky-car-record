@@ -25,7 +25,6 @@ const Hero = () => {
                 </div>
                 <input className="text-sm px-4 py-2 w-[280px] lg:w-[500px] border border-solid border-gray-300 rounded" type="search" placeholder="Search" />
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {/* loop start from this div */}
                 <div className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]">

@@ -3,6 +3,9 @@ import "../../index.css";
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const CreateBooking = () => {
   const [formData, setFormData] = useState({
@@ -16,9 +19,22 @@ const CreateBooking = () => {
     return_date: ''
   });
 
+  const showToastMessage = () => {
+    toast.success('🦄 Wow so easy!', {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "dark",
+      });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Send the formData to the server
     fetch('http://localhost:3000/car-booking', {
       method: 'POST',
@@ -47,6 +63,10 @@ const CreateBooking = () => {
 
   return (
     <>
+      <div>
+        <button onClick={showToastMessage}>Notify</button>
+        <ToastContainer />
+      </div>
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <div className='p-3 md:p-6 flex'>
