@@ -14,17 +14,17 @@ exports.index = async (req, res) => {
 };
 
 exports.store = async (req, res) => {
-  const { client_name, dealer_name, car_name, number_plate, price, destination, booking_date, return_date } = req.body;
+  const { clientName, dealerName, carName, numberPlate, price, destination, bookingDate, returnDate } = req.body;
 
   const carBookingData = {
-    client_name: client_name,
-    dealer_name: dealer_name,
-    car_name: car_name,
-    number_plate: number_plate,
+    clientName: clientName,
+    dealerName: dealerName,
+    carName: carName,
+    numberPlate: numberPlate,
     price: price,
     destination: destination,
-    booking_date: booking_date,
-    return_date: return_date,
+    bookingDate: bookingDate,
+    returnDate: returnDate,
   };
 
   try {

@@ -1,11 +1,20 @@
-import React from 'react'
-import styles from '../style'
-import { date, deletebtn, edit, addcarbooking } from '../assets'
-import '../index.css'
-import { Link } from 'react-router-dom'
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+import styles from '../style';
+import { date, deletebtn, edit, addcarbooking } from '../assets';
+import '../index.css';
 
 const Hero = () => {
+  const [bookings, setBookings] = useState([]); 
 
+  useEffect(() => {
+    // Fetch data from your Node.js backend
+    fetch('http://localhost:3000/car-booking') // Replace with your actual API endpoint
+      .then((response) => response.json())
+      .then((data) => setBookings(data.data)) // Set bookings with the data array
+      .catch((error) => console.error('Error fetching data:', error));
+  }, []);
+    
   return (
     <>
       <div className={`bg-primary ${styles.flexStart}`}>
@@ -25,55 +34,57 @@ const Hero = () => {
                 </div>
                 <input className="text-sm px-4 py-2 w-[280px] lg:w-[500px] border border-solid border-gray-300 rounded" type="search" placeholder="Search" />
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {/* loop start from this div */}
-                <div className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]">
-                  <table className="text-gradient">
-                    <tbody>
-                      <tr>
-                        <td className="px-6 py-4 flex">
-                          <img src={date} alt="date image" />
-                          <span className='font-bold text-lg mx-3 mt-[2px]'>10/10/2023</span>
-                        </td>
-                        <td>
-                          <div className='flex justify-end mr-2'>
-                            <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:w-8' />
-                            <img src={deletebtn} alt="delete image" className='w-7 cursor-pointer hover:w-8' />
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
+                {bookings.map((booking) => (
+                  <div key={booking._id} className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]">
+                    <table className="text-gradient">
+                      <tbody>
+                        <tr>
+                          <td className="px-6 py-4 flex">
+                            <img src={date} alt="date image" />
+                            <span className='font-bold text-lg mx-3 mt-[2px]'>{formatDate(booking.bookingDate)}</span>
+                          </td>
+                          <td>
+                            <div className='flex justify-end mr-2'>
+                              <Link to={`/edit-booking/${booking.id}`}>
+                                <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:w-8' />
+                              </Link>
+                              <img src={deletebtn} alt="delete image" className='w-7 cursor-pointer hover:w-8' />
+                            </div>
+                          </td>
+                        </tr>
+                        <tr>
                         <td className="px-6 py-4 border-b border-gray-300">Car name</td>
-                        <td className="px-6 py-4 border-b border-gray-300">Innova</td>
+                        <td className="px-6 py-4 border-b border-gray-300">{booking.carName}</td>
                       </tr>
                       <tr>
                         <td className="px-6 py-4 border-b border-gray-300">Price</td>
-                        <td className="px-6 py-4 border-b border-gray-300">₹ 4000</td>
+                        <td className="px-6 py-4 border-b border-gray-300">₹ {booking.price}</td>
                       </tr>
                       <tr>
                         <td className="px-6 py-4 border-b border-gray-300">Number Plate</td>
-                        <td className="px-6 py-4 border-b border-gray-300">GJ01HK1212</td>
+                        <td className="px-6 py-4 border-b border-gray-300">{booking.price}</td>
                       </tr>
                       <tr>
                         <td className="px-6 py-4 border-b border-gray-300">Client Name</td>
-                        <td className="px-6 py-4 border-b border-gray-300">vivek patel</td>
+                        <td className="px-6 py-4 border-b border-gray-300">{booking.clientName}</td>
                       </tr>
                       <tr>
                         <td className="px-6 py-4 border-b border-gray-300">Dealer Name</td>
-                        <td className="px-6 py-4 border-b border-gray-300">Vatsal Patel</td>
+                        <td className="px-6 py-4 border-b border-gray-300">{booking.dealerName}</td>
                       </tr>
                       <tr>
                         <td className="px-6 py-4 border-b border-gray-300">Destination</td>
-                        <td className="px-6 py-4 border-b border-gray-300">Udaipur</td>
+                        <td className="px-6 py-4 border-b border-gray-300">{booking.destination}</td>
                       </tr>
                       <tr>
                         <td className="px-6 py-4">Return Date</td>
-                        <td className="px-6 py-4">15/10/2023</td>
+                        <td className="px-6 py-4">{formatDate(booking.bookingDate)}</td>
                       </tr>
-                    </tbody>
-                  </table>
-                </div>
+                      </tbody>
+                    </table>
+                  </div>
+                ))}
               </div>
             </div>
           </section>
@@ -83,4 +94,9 @@ const Hero = () => {
   )
 }
 
-export default Hero
+function formatDate(dateString) {
+  const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+  return new Date(dateString).toLocaleDateString(undefined, options);
+}
+
+export default Hero;
