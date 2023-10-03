@@ -1,19 +1,19 @@
 const mongoose = require('mongoose');
 
 const carBookingSchema = new mongoose.Schema({
-    client_name: {
+    clientName: {
         type: String,
         required: true
     },
-    dealer_name: {
+    dealerName: {
         type: String,
         required: true
     },
-    car_name: {
+    carName: {
         type: String,
         required: true
     },
-    number_plate: {
+    numberPlate: {
         type: String,
         required: true
     },
@@ -25,12 +25,12 @@ const carBookingSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    booking_date: {
+    bookingDate: {
         type: Date,
         required: true
     },
-    return_date: {
-        type: Date,
+    returnDate: {
+        type: Date, 
         required: true
     },
     status: {
@@ -40,8 +40,10 @@ const carBookingSchema = new mongoose.Schema({
         default: 'Active'
     }
 },
-    { timestamps: true },
-    { versionKey: false }
+    { 
+        timestamps: true ,
+        versionKey: false
+    }
 );
 
 module.exports = mongoose.model('car_bookings', carBookingSchema);
