@@ -46,7 +46,7 @@ const Hero = () => {
                           </td>
                           <td>
                             <div className='flex justify-end mr-2'>
-                              <Link to={`/edit-booking/${booking.id}`}>
+                              <Link to={`/update-booking/${booking._id}`}>
                                 <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:w-8' />
                               </Link>
                               <img src={deletebtn} alt="delete image" className='w-7 cursor-pointer hover:w-8' />

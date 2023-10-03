@@ -13,7 +13,9 @@
     "caniuse-lite": "^1.0.30001541",
     "prop-types": "^15.8.1",
     "react": "^18.2.0",
+    "react-date-picker": "^10.5.1",
     "react-dom": "^18.2.0",
+    "react-flatpickr": "^3.10.13",
     "react-router-dom": "^6.16.0",
     "react-toastify": "^9.1.3"
   },
