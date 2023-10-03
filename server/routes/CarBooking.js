@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const CarBookingController = require("../controllers/CarBookingController");
 
-router.get("/", CarBookingController.index);
+// Apply the middleware to protect these routes
 router.post("/", CarBookingController.store);
-router.get("/:id", CarBookingController.show);
-router.put("/:id", CarBookingController.update);
-router.delete("/:id", CarBookingController.delete);    
+// router.get("/:id", verifyToken, CarBookingController.show);
+// router.put("/:id", verifyToken, CarBookingController.update);
+// router.delete("/:id", verifyToken, CarBookingController.delete);
 
 module.exports = router;
