@@ -67,10 +67,7 @@ const CreateBooking = () => {
 
   return (
     <>
-      <div>
-        <button onClick={showToastMessage}>Notify</button>
-        <ToastContainer />
-      </div>
+    
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <div className='p-3 md:p-6 flex'>
