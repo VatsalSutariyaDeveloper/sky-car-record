@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
 const carBookingSchema = new mongoose.Schema({
-    car_name: {
+    carName: {
         type: String,
         required: true
     },
-    number_plate: {
+    numberPlate: {
         type: String,
         required: true
     },
@@ -16,7 +16,10 @@ const carBookingSchema = new mongoose.Schema({
         default: 'Active'
     }
 },
-    { timestamps: true },
-    { versionKey: false });
+    {
+        timestamps: true,
+        versionKey: false
+    }
+);
 
 module.exports = mongoose.model('cars', carBookingSchema);
