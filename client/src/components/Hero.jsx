@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../style'
-import { date, deletebtn, edit, addcarbooking ,datesearch} from '../assets'
+import { date, deletebtn, edit, addcarbooking, datesearch } from '../assets'
 import '../index.css'
 import { Link } from 'react-router-dom'
 
 const Hero = () => {
-  const [bookings, setBookings] = useState([]); 
+  const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
     // Fetch data from your Node.js backend
@@ -14,7 +14,20 @@ const Hero = () => {
       .then((data) => setBookings(data.data)) // Set bookings with the data array
       .catch((error) => console.error('Error fetching data:', error));
   }, []);
-    
+
+  const deleteBooking = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/car-booking/${id}`, {
+        method: 'DELETE',
+      });
+
+      // Remove the deleted booking from the state
+      setBookings((prevBookings) => prevBookings.filter((booking) => booking._id !== id));
+    } catch (error) {
+      console.error('Error deleting booking:', error);
+    }
+  };
+
   return (
     <>
       <div className={`bg-primary ${styles.flexStart}`}>
@@ -49,38 +62,43 @@ const Hero = () => {
                               <Link to={`/update-booking/${booking._id}`}>
                                 <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:w-8' />
                               </Link>
-                              <img src={deletebtn} alt="delete image" className='w-7 cursor-pointer hover:w-8' />
+                              <img
+                                src={deletebtn}
+                                alt="delete image"
+                                className="w-7 cursor-pointer hover:w-8"
+                                onClick={() => deleteBooking(booking._id)} 
+                              />
                             </div>
                           </td>
                         </tr>
                         <tr>
-                        <td className="px-6 py-4 border-b border-gray-300">Car name</td>
-                        <td className="px-6 py-4 border-b border-gray-300">{booking.carName}</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 border-b border-gray-300">Price</td>
-                        <td className="px-6 py-4 border-b border-gray-300">₹ {booking.price}</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 border-b border-gray-300">Number Plate</td>
-                        <td className="px-6 py-4 border-b border-gray-300">{booking.price}</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 border-b border-gray-300">Client Name</td>
-                        <td className="px-6 py-4 border-b border-gray-300">{booking.clientName}</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 border-b border-gray-300">Dealer Name</td>
-                        <td className="px-6 py-4 border-b border-gray-300">{booking.dealerName}</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4 border-b border-gray-300">Destination</td>
-                        <td className="px-6 py-4 border-b border-gray-300">{booking.destination}</td>
-                      </tr>
-                      <tr>
-                        <td className="px-6 py-4">Return Date</td>
-                        <td className="px-6 py-4">{formatDate(booking.bookingDate)}</td>
-                      </tr>
+                          <td className="px-6 py-4 border-b border-gray-300">Car name</td>
+                          <td className="px-6 py-4 border-b border-gray-300">{booking.carName}</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 border-b border-gray-300">Price</td>
+                          <td className="px-6 py-4 border-b border-gray-300">₹ {booking.price}</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 border-b border-gray-300">Number Plate</td>
+                          <td className="px-6 py-4 border-b border-gray-300">{booking.price}</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 border-b border-gray-300">Client Name</td>
+                          <td className="px-6 py-4 border-b border-gray-300">{booking.clientName}</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 border-b border-gray-300">Dealer Name</td>
+                          <td className="px-6 py-4 border-b border-gray-300">{booking.dealerName}</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4 border-b border-gray-300">Destination</td>
+                          <td className="px-6 py-4 border-b border-gray-300">{booking.destination}</td>
+                        </tr>
+                        <tr>
+                          <td className="px-6 py-4">Return Date</td>
+                          <td className="px-6 py-4">{formatDate(booking.bookingDate)}</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
