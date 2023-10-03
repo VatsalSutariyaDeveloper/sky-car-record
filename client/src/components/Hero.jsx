@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styles from '../style';
-import { date, deletebtn, edit, addcarbooking } from '../assets';
-import '../index.css';
+import styles from '../style'
+import { date, deletebtn, edit, addcarbooking ,datesearch} from '../assets'
+import '../index.css'
+import { Link } from 'react-router-dom'
 
 const Hero = () => {
   const [bookings, setBookings] = useState([]); 
@@ -26,8 +26,8 @@ const Hero = () => {
                   <Link to="/add-booking">
                     <div className='p-[8px] lg:px-4 bg-black-gradient rounded-full lg:rounded-lg'>
                       <div className='flex items-center cursor-pointer' id='addbookingbtn'>
-                        <img src={addcarbooking} alt="addcarbooking" className='w-7 lg:w-5' />
-                        <span className='hidden lg:inline ml-2 text-white'>New Booking</span>
+                        <img src={datesearch} alt="addcarbooking" className='w-7 lg:w-5' />
+                        <span className='hidden lg:inline ml-2 text-white'>Search Date</span>
                       </div>
                     </div>
                   </Link>

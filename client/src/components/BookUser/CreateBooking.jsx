@@ -4,6 +4,9 @@ import "../../index.css";
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const CreateBooking = () => {
   const [formData, setFormData] = useState({
@@ -64,6 +67,7 @@ const CreateBooking = () => {
 
   return (
     <>
+    
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <div className='p-3 md:p-6 flex'>

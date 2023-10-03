@@ -12,6 +12,7 @@ import instagram from "./instagram.svg";
 import linkedin from "./linkedin.svg";
 import twitter from "./twitter.svg";
 import radio from "./radio.svg";
+import datesearch from "./datesearch.svg";
 import addcarbooking from "./addcarbooking.svg";
 
 
@@ -30,5 +31,6 @@ export {
   edit,
   deletebtn,
   addcarbooking,
-  radio
+  radio,
+  datesearch
 };
