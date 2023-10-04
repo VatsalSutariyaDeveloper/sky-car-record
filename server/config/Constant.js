@@ -15,7 +15,7 @@ module.exports = Object.freeze({
     MSG_FOR_CAR_DATA_NOT_FOUND: "Car Data not found",
 
     // TOKEN
-    TOKEN_KEY: "secret",
+    SECRET_TOKEN_KEY: "YVV",
 
     // IMAGE CONSTANT
     MSG_FOR_UNSUPPORTED_FILE: "Unsupported file type",

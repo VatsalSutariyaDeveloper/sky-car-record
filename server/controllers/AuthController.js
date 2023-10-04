@@ -3,7 +3,6 @@ const constant = require('../config/Constant');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-
 // exports.store = async (req, res) => {
 //     const { userName, email, phone, password } = req.body;
 
@@ -30,7 +29,7 @@ exports.login = async (req, res) => {
     try {
       // Find the user by username
       const user = await User.findOne({ userName });
-  
+
       if (!user) {
         return res.status(401).json({ message: "User not found" });
       }
@@ -41,8 +40,8 @@ exports.login = async (req, res) => {
       }
   
       // Create and sign a JWT token
-      const token = jwt.sign({ userId: user._id }, "your-secret-key", {
-        expiresIn: "1h", // Token expires in 1 hour
+      const token = jwt.sign({ userId: user._id }, constant.SECRET_TOKEN_KEY, {
+        expiresIn: "1h",
       });
   
       res.status(200).json({ message: "Login successful", token });

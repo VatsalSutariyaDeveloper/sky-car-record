@@ -41,7 +41,7 @@ const Login = () => {
                             alt="Sample image" className='animate-login-image login-image' />
                     </div>
                     <div className="md:w-1/3 max-w-sm">
-                        <input className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded" type="text" placeholder="Email Address" name="userName" value={formData.userName} onChange={handleChange} />
+                        <input className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded" type="text" placeholder="User Name" name="userName" value={formData.userName} onChange={handleChange} />
                         <input className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4" type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
                         <div className="mt-4 flex justify-between font-semibold text-sm">
                             <label className="flex text-white hover:text-slate-600 cursor-pointer">
