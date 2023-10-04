@@ -16,6 +16,7 @@ import addcarbooking from "./addcarbooking.svg";
 import error404 from "./error404.svg";
 import datesearch from "./datesearch.svg";
 import nodata from "./nodata.svg";
+import carsearch from "./carsearch.svg";
 
 
 export {
@@ -36,5 +37,6 @@ export {
   radio,
   datesearch,
   error404,
-  nodata
+  nodata,
+  carsearch
 };

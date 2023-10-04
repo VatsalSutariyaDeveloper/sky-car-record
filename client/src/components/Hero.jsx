@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../style';
-import { date, deletebtn, edit, addcarbooking, datesearch, nodata } from '../assets';
+import { date, deletebtn, edit, carsearch, datesearch, nodata } from '../assets';
 import '../index.css';
 import { Link } from 'react-router-dom';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import CustomTextField from './BookUser/CustomTextField';
 
 const Hero = () => {
   const [bookings, setBookings] = useState([]);
   const [searchInput, setSearchInput] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:3000/car-booking')
@@ -78,6 +80,19 @@ const Hero = () => {
     }
   };
 
+  const handleDateChange = (event) => {
+    const selectedDateString = event.target.value;
+
+    setSelectedDate(selectedDateString);
+
+    const filtered = bookings.filter((booking) => {
+      const bookingDate = new Date(booking.bookingDate).toISOString().split('T')[0];
+      return bookingDate === selectedDateString;
+    });
+
+    setFilteredBookings(filtered);
+  };
+
   return (
     <>
       <div className={`bg-primary ${styles.flexStart}`}>
@@ -87,30 +102,30 @@ const Hero = () => {
             className={`md:flex-row flex-col ${styles.paddingY}`}
           >
             <div className={`${styles.flexCenter} flex-col xl:px-0 sm:px-16`}>
-              <div className="flex items-center pb-6 ml-[255px]">
-                <div className="-ml-[270px] mx-2">
-                  <div className="p-[5px] lg:px-4 lg:py-[0.10rem] bg-black-gradient rounded-full lg:rounded-lg flex justify-center items-center">
-                    <div className="flex items-center cursor-pointer">
-                      <input
-                        className="border border-solid date-input mt-3"
-                        type="date"
-                      />
-                      <span className="hidden lg:inline ml-2 text-white">Search Date</span>
-                    </div>
+              <div className="md:flex md:flex-row md:mx-3 md:pb-5">
+                <div className="flex flex-row">
+                  <div className="relative">
+                    <img src={datesearch} alt="" className='md:hidden mx-2 w-6 absolute top-1/2 left-2 transform -translate-y-1/2 cursor-pointer' />
+                    <input type="date" id='datesearch' className="bg-transparent border border-gray-300 text-white text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[310px] md:pl-2 pl-[3.3rem] p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      value={selectedDate}
+                      onChange={handleDateChange} />
                   </div>
-
                 </div>
-                <input
-                  className="text-sm px-3 py-2 w-[280px] lg:w-[500px] border border-solid border-gray-300 rounded"
-                  type="search"
-                  placeholder="Search"
-                  value={searchInput}
-                  onChange={handleSearchInputChange}
-                />
+                <div className="flex flex-row mt-3 md:mt-0 md:mx-0 md:ml-12">
+                  <div className="relative">
+                    <img src={carsearch} alt="" className='mx-2 w-6 absolute top-1/2 left-2 transform -translate-y-1/2' />
+                    <input
+                      className="bg-transparent text-white py-2 border border-gray-300 text-sm rounded-lg pl-14 pr-3 w-[310px]"
+                      type="search"
+                      value={searchInput}
+                      onChange={handleSearchInputChange}
+                    />
+                  </div>
+                </div>
               </div>
               {filteredBookings.length === 0 ? (
                 <div className="">
-                  <img src={nodata} alt="" className='h-screen -mt-40 md:-mt-0 sm:-mt-0' />
+                  <img src={nodata} alt="" className='md:h-screen h-96 md:-mt-0 sm:-mt-0' />
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
