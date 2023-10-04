@@ -5,8 +5,8 @@ exports.index = async (req, res) => {
   try {
     const carBooking = await CarBooking.find();
     res.status(200).json({
-        message : constant.MSG_FOR_GET_BOOKING_DATA_SUCCESSFULLY,
-        data : carBooking
+      message: constant.MSG_FOR_GET_BOOKING_DATA_SUCCESSFULLY,
+      data: carBooking
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -30,8 +30,8 @@ exports.store = async (req, res) => {
   try {
     const carBooking = await CarBooking.create(carBookingData);
     res.status(201).json({
-        message: constant.MSG_FOR_BOOKING_SUCCEESFULL,
-        data:carBooking
+      message: constant.MSG_FOR_BOOKING_SUCCEESFULL,
+      data: carBooking,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -40,23 +40,23 @@ exports.store = async (req, res) => {
 
 exports.show = async (req, res) => {
   try {
-      const carBooking = await CarBooking.findById(req.params.id);
-      res.status(201).json({
-        message: constant.MSG_FOR_BOOKING_UPDATE_SUCCEESFULL,
-        data:carBooking
+    const carBooking = await CarBooking.findById(req.params.id);
+    res.status(201).json({
+      message: constant.MSG_FOR_BOOKING_UPDATE_SUCCEESFULL,
+      data: carBooking
     });
-  } catch(error) {
-      res.status(404).json({ message: error.message});
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
 };
 
 exports.update = async (req, res) => {
   const { id } = req.params;
-  
+
   if (req.file) {
-    req.body.profileImage = req.file.filename; 
+    req.body.profileImage = req.file.filename;
   }
-  
+
   try {
     const updatedCarBooking = await CarBooking.findByIdAndUpdate(id.trim(), req.body, {
       new: true, // Return the updated document
@@ -67,8 +67,8 @@ exports.update = async (req, res) => {
     }
 
     res.status(200).json({
-        message : constant.MSG_FOR_BOOKING_UPDATE_SUCCEESFULL,
-        data : updatedCarBooking
+      message: constant.MSG_FOR_BOOKING_UPDATE_SUCCEESFULL,
+      data: updatedCarBooking
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
