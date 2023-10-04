@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const Hero = () => {
   const [bookings, setBookings] = useState([]);
   const [searchInput, setSearchInput] = useState('');
-  
+
 
   useEffect(() => {
     fetch('http://localhost:3000/car-booking')
@@ -30,6 +30,19 @@ const Hero = () => {
   const filteredBookings = bookings.filter((booking) =>
     booking.carName.includes(searchInput)
   );
+
+  const deleteBooking = async (id) => {
+    try {
+      await fetch(`http://localhost:3000/car-booking/${id}`, {
+        method: 'DELETE',
+      });
+
+      // Remove the deleted booking from the state
+      setBookings((prevBookings) => prevBookings.filter((booking) => booking._id !== id));
+    } catch (error) {
+      console.error('Error deleting booking:', error);
+    }
+  };
 
   return (
     <>

@@ -38,23 +38,6 @@ exports.store = async (req, res) => {
   }
 };
 
-
-exports.show = async (req, res) => {
-  try {
-    const carBooking = await CarBooking.findById(req.params.id);
-    if (!CarBooking) {
-      res.status(404).json({ message: constant.MSG_FOR_BOOKING_NOT_FOUND });
-    } else {
-        res.status(200).json({
-            message : constant.MSG_FOR_GET_BOOKING_DATA_SUCCESSFULLY,
-            data : carBooking
-        });
-    }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
 exports.update = async (req, res) => {
   const { id } = req.params;
   
