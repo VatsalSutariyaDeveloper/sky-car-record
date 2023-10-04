@@ -21,7 +21,7 @@ const App = () => {
       <Routes>
       <Route index element={<Auth element={<Hero />} />} />
         <Route path="login" element={<AuthGuard element={<Login />} />} />
-        <Route path="forgot-password" element={<Auth element={<ForgotPassword />} />} />
+        <Route path="forgot-password" element={<AuthGuard element={<ForgotPassword />} />} />
         <Route path="edit-booking/:id" element={<Auth element={<UpdateBooking />} />} />
         <Route path="add-booking" element={<Auth element={<CreateBooking />} />} />
         <Route path="*" element={<Error404 />} />
