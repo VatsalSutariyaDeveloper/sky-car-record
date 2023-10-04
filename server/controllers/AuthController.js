@@ -3,6 +3,13 @@ const constant = require('../config/Constant');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
+const maxAge = 3*24*60*60
+const creatToken = (id) => {
+  return jwt.sign({id},constant.SECRET_TOKEN_KEY,{
+    expiresIn:maxAge
+  })
+} 
+
 // exports.store = async (req, res) => {
 //     const { userName, email, phone, password } = req.body;
 
@@ -39,12 +46,13 @@ exports.login = async (req, res) => {
         return res.status(401).json({ message: "Invalid password" });
       }
   
-      // Create and sign a JWT token
-      const token = jwt.sign({ userId: user._id }, constant.SECRET_TOKEN_KEY, {
-        expiresIn: "1h",
+      const token = creatToken(user._id)
+      res.cookie("jwt", token, {
+        withCrdentials:true,
+        httpOnly: false,
+        maxAge: maxAge * 1000,
       });
-  
-      res.status(200).json({ message: "Login successful", token });
+      res.status(200).json({ user: user._id, created:true });
     } catch (error) {
       console.error("Login error:", error);
       res.status(500).json({ message: "Internal server error" });

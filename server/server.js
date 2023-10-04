@@ -1,41 +1,32 @@
 const express = require('express');
 require('dotenv').config();
-require('./config/DatabseConnection'); // Assuming this is the correct path
-const app = express();
+require('./config/DatabseConnection');
 const carBookingRoute = require('./routes/CarBooking');
 const authRoute = require('./routes/Auth');
 const carRoute = require('./routes/Car');
 const cors = require('cors');
-const jwt = require('jsonwebtoken'); // Import the jsonwebtoken library
-const verifyToken = require("./middleware/verifyToken");
+const app = express();
+const cookieParser = require('cookie-parser');
 
-// Middleware
-app.use(cors());
+// Define CORS options
+const corsOptions = {
+    origin: 'http://localhost:5173', 
+    credentials: true, 
+};
+
+// Use the CORS middleware with the defined options
+app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(express.json());
 app.use('/uploads', express.static('uploads'));
-
 app.use('/car-booking', carBookingRoute);
 app.use('/auth', authRoute);
 app.use('/car', carRoute);
 
-const verifyJWT = (req, res, next) => {
-    const token = req.headers["x-access-token"];
-    if (!token) {
-        return res.status(401).json({ auth: false, message: "Token not provided" });
-    }
-
-    jwt.verify(token, "jwtSecret", (err, decoded) => {
-        if (err) {
-            return res.status(500).json({ auth: false, message: "Failed to authenticate" });
-        }
-
-        req.userId = decoded.id;
-        next();
-    });
-};
-
-app.get("/isUserAuth", verifyJWT, (req, res) => {
-    res.send("Yo, you are authenticated! Congrats!");
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({ message: 'Internal Server Error' });
 });
 
 const port = process.env.PORT || 3000;

@@ -22,10 +22,8 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/auth/login", formData);
-            console.log("Login successful:", response);
+            const response = await axios.post("http://localhost:3000/auth/login", formData, { withCredentials: true });
             navigate('/');
-            localStorage.setItem("token", response.data.token);
         } catch (error) {
             console.error("Login error:", error);
         }

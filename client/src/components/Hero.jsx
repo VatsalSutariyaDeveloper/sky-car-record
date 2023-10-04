@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import styles from '../style';
 import { date, deletebtn, edit, addcarbooking, datesearch, nodata } from '../assets';
 import '../index.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useCookies } from 'react-cookie'
+import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Hero = () => {
   const [bookings, setBookings] = useState([]);
   const [searchInput, setSearchInput] = useState('');
-
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:3000/car-booking')
@@ -98,7 +101,7 @@ const Hero = () => {
                                   src={deletebtn}
                                   alt="delete image"
                                   className="w-7 cursor-pointer hover:w-8"
-                                  onClick={() => deleteBooking(booking._id)} 
+                                  onClick={() => deleteBooking(booking._id)}
                                 />
                               </div>
                             </td>
@@ -140,6 +143,7 @@ const Hero = () => {
             </div>
           </section>
         </div>
+        <ToastContainer/>
       </div>
     </>
   );
