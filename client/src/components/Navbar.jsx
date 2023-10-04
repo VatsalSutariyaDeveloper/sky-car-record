@@ -64,9 +64,9 @@ const Navbar = () => {
           <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-primary dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
             <NavLink
-                exact
+                exact="true"
                 to="/"
-                activeClassName="active"
+                activeclassname="active"
                 className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${
                   location.pathname === '/add-booking' ? 'text-[#5fbdc7]' : ''
                 }`}

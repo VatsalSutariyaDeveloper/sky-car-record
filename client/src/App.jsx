@@ -1,6 +1,7 @@
 import { Navbar, Hero } from "./components";
 import { Routes, Route, useLocation } from "react-router-dom";
-import Login from "./components/Login";
+import Login from "./components/Auth/Login";
+import ForgotPassword from "./components/Auth/ForgotPassword";
 import CreateBooking from "./components/BookUser/CreateBooking";
 import UpdateBooking from "./components/BookUser/UpdateBooking";
 import Error404 from "./components/Error404";
@@ -18,6 +19,7 @@ const App = () => {
       <Routes>
         <Route index element={<Hero />} />
         <Route path="login" element={<Login />} />
+        <Route path="forgot-password" element={<ForgotPassword />} />
         <Route path="edit-booking/:id" element={<UpdateBooking />} />
         <Route path="add-booking" element={<CreateBooking />} />
         <Route path="*" element={<Error404 />} />
