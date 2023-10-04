@@ -6,6 +6,7 @@ import { openeye, closeeye } from '../../assets';
 import axios from 'axios';
 
 const ForgotPassword = () => {
+    const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
@@ -25,7 +26,7 @@ const ForgotPassword = () => {
         e.preventDefault();
         try {
             if (password === confirmPassword) {
-                const response = await axios.post("http://localhost:3000/auth/login", {'password':password});
+                const response = await axios.post("http://localhost:3000/auth/login", {'password':password,'userName':userName});
                 console.log("Login successful:", response);
             }
             else {
@@ -49,6 +50,17 @@ const ForgotPassword = () => {
                                 className='animate-login-image login-image'
                             />
                         </div>
+                        <div className="md:w-1/3 max-w-sm">
+                            <div className="w-[300px]">
+                                <input
+                                    className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
+                                    type='text'
+                                    placeholder="User Name"
+                                    name="userName"
+                                    value={userName}
+                                    onChange={(e) => setUserName(e.target.value)}
+                                />
+                            </div>
                         <div className="md:w-1/3 max-w-sm">
                             <div className="relative w-[300px]">
                                 <input
@@ -107,6 +119,7 @@ const ForgotPassword = () => {
                             <div className="text-center md:text-left">
                                 <button className={`mt-4 lg:ml-[70px] md:ml-[60px] w-[150px] px-4 py-2 text-black font-bold uppercase rounded text-xs  bg-blue-gradient`} type="submit">Set Password</button>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </form>
