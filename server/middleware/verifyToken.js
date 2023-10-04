@@ -1,13 +1,14 @@
 const jwt = require("jsonwebtoken");
+const Constant = require("../config/Constant");
 
 function verifyToken(req, res, next) {
   const token = req.headers.authorization;
-  console.log(token);return
+  
   if (!token) {
     return res.status(401).json({ message: "No token provided" });
   }
 
-  jwt.verify(token, "your-secret-key", (err, decoded) => {
+  jwt.verify(token, constant.SECRET_TOKEN_KEY, (err, decoded) => {
     if (err) {
       return res.status(401).json({ message: "Invalid token" });
     }

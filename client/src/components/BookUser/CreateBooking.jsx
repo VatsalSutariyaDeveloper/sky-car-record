@@ -1,24 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../../index.css";
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 const CreateBooking = () => {
-  const [formData, setFormData] = useState({
+  const currentDate = new Date().toISOString().split('T')[0]; // Get the current date in 'YYYY-MM-DD' format
+  const navigate = useNavigate();
+
+  const initialFormData = {
     clientName: '',
     dealerName: '',
     carName: '',
     numberPlate: '',
     price: '',
     destination: '',
-    bookingDate: '',
+    bookingDate: currentDate,
     returnDate: '',
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
   const [error, setError] = useState({}); // State to hold validation error messages
 
   const handleChange = (name, value) => {
@@ -26,11 +31,15 @@ const CreateBooking = () => {
       ...formData,
       [name]: value,
     });
-  
+
     // Clear the error message when the user starts typing again
     setError({ ...error, [name]: '' });
   };
-  
+
+  const resetForm = () => {
+    setFormData(initialFormData);
+    setError({});
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,21 +54,9 @@ const CreateBooking = () => {
 
     try {
       const response = await axios.post('http://localhost:3000/car-booking', formData);
-
       console.log(response.data);
-
-      // Reset the form data and error messages after successful submission
-      setFormData({
-        clientName: '',
-        dealerName: '',
-        carName: '',
-        numberPlate: '',
-        price: '',
-        destination: '',
-        bookingDate: '',
-        returnDate: '',
-      });
-      setError({});
+      resetForm();
+      // navigate('/');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -67,7 +64,6 @@ const CreateBooking = () => {
 
   return (
     <>
-    
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <div className='p-3 md:p-6 flex'>
@@ -87,23 +83,26 @@ const CreateBooking = () => {
               <CustomTextField type="text" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
               <CustomTextField type="number" label="Price" name="price" value={formData.price} onChange={handleChange} />
               <CustomTextField type="text" label="Destination" name="destination" value={formData.destination} onChange={handleChange} />
-              <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} error={error.bookingDate} />
-              <CustomTextField type="date" label="Return Date" name="returnDate" value={formData.returnDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} error={error.returnDate} />
+              <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} minDate={currentDate} error={error.bookingDate} />
+              <CustomTextField type="date" label="Return Date" name="returnDate" value={formData.returnDate} onChange={handleChange} minDate={currentDate} error={error.returnDate} />
             </div>
             {error.bookingDate && <p className="text-red-500">{error.bookingDate}</p>} {/* Display validation error for bookingDate */}
             {error.returnDate && <p className="text-red-500">{error.returnDate}</p>} {/* Display validation error for returnDate */}
             <div className='flex justify-center'>
               <div className='px-1'>
-                <button className='bg-primary text-[#33bbcf] py-2 px-5 mt-5 rounded-md w-full uppercase' type="submit">Book User</button>
+                {/* <Link to="/"> */}
+                <button className='bg-primary text-[#33bbcf] py-2 px-5 mt-5 rounded-md w-full uppercase' type="submit">Book Car</button>
+                {/* </Link> */}
               </div>
               <div className='px-1'>
-                <button className='bg-primary text-[#33bbcf] py-2 px-5 mt-5 rounded-md w-full uppercase' type="reset">Reset Form</button>
+                <button className='bg-primary text-[#33bbcf] py-2 px-5 mt-5 rounded-md w-full uppercase' type="button" onClick={resetForm}>Reset Form</button>
               </div>
             </div>
           </div>
         </form>
       </section>
     </>
-  )
+  );
 }
+
 export default CreateBooking;
