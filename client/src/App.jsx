@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navbar, Hero } from "./components";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { Auth, AuthGuard } from "./components/Auth"; // Correct import path
 import Login from "./components/Auth/Login";
 import CreateBooking from "./components/BookUser/CreateBooking";
@@ -9,11 +9,17 @@ import ForgotPassword from './components/Auth/ForgotPassword';
 import Error404 from "./components/Error404";
 
 const App = () => {
+  const location = useLocation();
+
+  const showNavbarPaths = ["/", "/add-booking", "/update-booking"];
+
+  const shouldShowNavbar = showNavbarPaths.some(path => location.pathname.startsWith(path));
+
   return (
     <>
-      {window.location.pathname !== '/login' && <Navbar />} 
+      {shouldShowNavbar && <Navbar />}
       <Routes>
-        <Route index element={<Auth element={<Hero />} />} />
+      <Route index element={<Auth element={<Hero />} />} />
         <Route path="login" element={<AuthGuard element={<Login />} />} />
         <Route path="forgot-password" element={<Auth element={<ForgotPassword />} />} />
         <Route path="edit-booking/:id" element={<Auth element={<UpdateBooking />} />} />

@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { close, menu } from '../assets';
 import styles from '../style';
+import { useCookies } from 'react-cookie'
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
   const location = useLocation();
+  const [cookies, setCookie, removeCookie] = useCookies([]);
+  const logout = () =>{
+    removeCookie('jwt');
+    navigate('/login')
+  }
 
   const toggleMenu = () => {
     setToggle((prev) => !prev);
@@ -81,16 +88,9 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink
-                to="/logout" // Update this to your logout route
-                activeclassname="active" // You can apply a different style for the active logout link
-                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${
-                  location.pathname === '/logout' ? 'text-[#5fbdc7]' : ''
-                }`}
-                onClick={closeNavbar}
-              >
-                Log out
-              </NavLink>
+              <button  activeclassname="active" // You can apply a different style for the active logout link
+                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}
+                onClick={logout}>Log out</button>
             </li>
           </ul>
         </div>
