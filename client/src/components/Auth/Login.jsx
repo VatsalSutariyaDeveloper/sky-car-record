@@ -3,14 +3,15 @@ import styles from '../../style';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-import { openeye,closeeye } from '../../assets';
+import { openeye, closeeye } from '../../assets';
 
 const Login = () => {
     const [formData, setFormData] = useState({
         userName: '',
         password: '',
+        rememberMe: false,
     });
-    const [showPassword, setShowPassword] = useState(false); 
+    const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -21,14 +22,22 @@ const Login = () => {
         });
     };
 
+    const handleCheckboxChange = (e) => {
+        const { name, checked } = e.target;
+        setFormData({
+            ...formData,
+            [name]: checked,
+        });
+    };
+
     const handleTogglePassword = () => {
-        setShowPassword(!showPassword); 
+        setShowPassword(!showPassword);
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/auth/login", formData);
+            const response = await axios.post("http://localhost:3000/auth/login", formData, { withCredentials: true });
             console.log("Login successful:", response);
             navigate('/');
             localStorage.setItem("token", response.data.token);
@@ -57,36 +66,42 @@ const Login = () => {
                             value={formData.userName}
                             onChange={handleChange}
                         />
-                         <div className="relative">
-                        <input
-                            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
-                            type={showPassword ? 'text' : 'password'} // Step 5: Dynamically set input type
-                            placeholder="Password"
-                            name="password"
-                            value={formData.password}
-                            onChange={handleChange}
-                        />
-                        <button
-                            className="absolute right-2 top-[26px]"
-                            type="button"
-                            onClick={handleTogglePassword}
-                        >
-                            {showPassword ? (
-                                <img
-                                    src={openeye}
-                                    alt="Hide Password"
-                                />
-                            ) : (
-                                <img
-                                    src={closeeye}
-                                    alt="Show Password"
-                                />
-                            )}
-                        </button>
-                    </div>
+                        <div className="relative">
+                            <input
+                                className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
+                                type={showPassword ? 'text' : 'password'} // Step 5: Dynamically set input type
+                                placeholder="Password"
+                                name="password"
+                                value={formData.password}
+                                onChange={handleChange}
+                            />
+                            <button
+                                className="absolute right-2 top-[26px]"
+                                type="button"
+                                onClick={handleTogglePassword}
+                            >
+                                {showPassword ? (
+                                    <img
+                                        src={openeye}
+                                        alt="Hide Password"
+                                    />
+                                ) : (
+                                    <img
+                                        src={closeeye}
+                                        alt="Show Password"
+                                    />
+                                )}
+                            </button>
+                        </div>
                         <div className="mt-4 flex justify-between font-semibold text-sm">
                             <label className="flex text-white hover:text-slate-600 cursor-pointer">
-                                <input className="mr-1" type="checkbox" />
+                                <input
+                                    className="mr-1"
+                                    type="checkbox"
+                                    name="rememberMe"
+                                    checked={formData.rememberMe}
+                                    onChange={handleCheckboxChange}
+                                />
                                 <span>Remember Me</span>
                             </label>
                             <a className="text-white hover:text-gray-200 hover:underline hover:underline-offset-4" href="#">Forgot Password?</a>

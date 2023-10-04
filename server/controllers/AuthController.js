@@ -3,36 +3,14 @@ const constant = require('../config/Constant');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const maxAge = 3*24*60*60
-const creatToken = (id) => {
+const creatToken = (id, maxAge) => {
   return jwt.sign({id},constant.SECRET_TOKEN_KEY,{
     expiresIn:maxAge
   })
 } 
 
-// exports.store = async (req, res) => {
-//     const { userName, email, phone, password } = req.body;
-
-//     try {
-//         const Users = await User.create({
-//             userName: userName,
-//             email: email,
-//             phone: phone,
-//             password: password,
-//         });
-
-//         res.status(201).json({
-//             message: constant.MSG_FOR_BOOKING_SUCCEESFULL,
-//             data: Users
-//         });
-
-//     } catch (error) {
-//         res.status(400).json({ message: error.message });
-//     }
-// };
-
 exports.login = async (req, res) => {
-    const { userName, password } = req.body;
+    const { userName, password, rememberMe } = req.body;
     try {
       // Find the user by username
       const user = await User.findOne({ userName });
@@ -46,7 +24,9 @@ exports.login = async (req, res) => {
         return res.status(401).json({ message: "Invalid password" });
       }
   
-      const token = creatToken(user._id)
+      const maxAge = rememberMe == false ? 50 * 365 * 24 * 60 * 60 : 5 * 24 * 60 * 60;
+
+      const token = creatToken(user._id, maxAge)
       res.cookie("jwt", token, {
         withCrdentials:true,
         httpOnly: false,
