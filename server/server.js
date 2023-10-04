@@ -6,7 +6,7 @@ const carBookingRoute = require('./routes/CarBooking');
 const authRoute = require('./routes/Auth');
 const carRoute = require('./routes/Car');
 const cors = require('cors');
-const jwt = require('jsonwebtoken'); // Import the jsonwebtoken library
+const jwt = require('jsonwebtoken'); 
 const verifyToken = require("./middleware/verifyToken");
 
 // Middleware

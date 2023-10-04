@@ -4,9 +4,13 @@ import "../../index.css";
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
 
 const CreateBooking = () => {
   const currentDate = new Date().toISOString().split('T')[0]; // Get the current date in 'YYYY-MM-DD' format
+  const navigate = useNavigate();
 
   const initialFormData = {
     clientName: '',
@@ -50,11 +54,9 @@ const CreateBooking = () => {
 
     try {
       const response = await axios.post('http://localhost:3000/car-booking', formData);
-
       console.log(response.data);
-
-      // Reset the form data and error messages after successful submission
       resetForm();
+      // navigate('/');
     } catch (error) {
       console.error('Error:', error);
     }
@@ -75,7 +77,7 @@ const CreateBooking = () => {
         <form onSubmit={handleSubmit}>
           <div className="px-2 pb-5">
             <div className="md:grid md:grid-cols-2 md:gap-2">
-            <CustomTextField type="text" label="Name" name="clientName" value={formData.clientName} onChange={handleChange} />
+              <CustomTextField type="text" label="Name" name="clientName" value={formData.clientName} onChange={handleChange} />
               <CustomTextField type="text" label="Dealer Name" name="dealerName" value={formData.dealerName} onChange={handleChange} />
               <CustomTextField type="text" label="Car Name" name="carName" value={formData.carName} onChange={handleChange} />
               <CustomTextField type="text" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
@@ -88,7 +90,9 @@ const CreateBooking = () => {
             {error.returnDate && <p className="text-red-500">{error.returnDate}</p>} {/* Display validation error for returnDate */}
             <div className='flex justify-center'>
               <div className='px-1'>
+                {/* <Link to="/"> */}
                 <button className='bg-primary text-[#33bbcf] py-2 px-5 mt-5 rounded-md w-full uppercase' type="submit">Book Car</button>
+                {/* </Link> */}
               </div>
               <div className='px-1'>
                 <button className='bg-primary text-[#33bbcf] py-2 px-5 mt-5 rounded-md w-full uppercase' type="button" onClick={resetForm}>Reset Form</button>
