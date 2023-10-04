@@ -12,7 +12,7 @@ const App = () => {
     <>
       {window.location.pathname !== '/login' && <Navbar />} 
       <Routes>
-        <Route index element={<Hero />} />
+        <Route index element={<Auth element={<Hero />} />} />
         <Route path="login" element={<AuthGuard element={<Login />} />} />
         <Route path="edit-booking/:id" element={<Auth element={<UpdateBooking />} />} />
         <Route path="add-booking" element={<Auth element={<CreateBooking />} />} />
