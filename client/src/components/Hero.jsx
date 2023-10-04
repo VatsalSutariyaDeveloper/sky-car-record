@@ -12,14 +12,21 @@ const Hero = () => {
   const [bookings, setBookings] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
+  const [filteredBookings, setFilteredBookings] = useState([]);
+
+  
   const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:3000/car-booking')
       .then((response) => response.json())
-      .then((data) => setBookings(data.data))
+      .then((data) => {
+        setBookings(data.data);
+        setFilteredBookings(data.data); // Initialize filteredBookings with all bookings
+      })
       .catch((error) => console.error('Error fetching data:', error));
   }, []);
+  
 
   function formatDate(dateString) {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
@@ -30,11 +37,6 @@ const Hero = () => {
   const handleSearchInputChange = (event) => {
     setSearchInput(event.target.value);
   };
-
-  // Function to filter bookings based on the search input
-  const filteredBookings = bookings.filter((booking) =>
-    booking.carName.includes(searchInput)
-  );
 
   const deleteBooking = (id) => {
     iziToast.question({
