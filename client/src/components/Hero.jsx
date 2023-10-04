@@ -3,8 +3,6 @@ import styles from '../style';
 import { date, deletebtn, edit, addcarbooking, datesearch, nodata } from '../assets';
 import '../index.css';
 import { Link, useNavigate } from 'react-router-dom';
-import { useCookies } from 'react-cookie'
-import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
