@@ -7,6 +7,8 @@ const carRoute = require('./routes/Car');
 const cors = require('cors');
 const app = express();
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken'); 
+const verifyToken = require("./middleware/verifyToken");
 
 // Define CORS options
 const corsOptions = {
