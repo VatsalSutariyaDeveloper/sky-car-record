@@ -6,7 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useCookies } from 'react-cookie'
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
-import { Link } from 'react-router-dom';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 
