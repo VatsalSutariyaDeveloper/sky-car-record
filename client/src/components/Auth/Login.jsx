@@ -29,7 +29,6 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post("http://localhost:3000/auth/login", formData);
-            console.log("Login successful:", response);
             navigate('/');
             localStorage.setItem("token", response.data.token);
         } catch (error) {
@@ -92,7 +91,7 @@ const Login = () => {
                             <Link to={`/forgot-password`} className="text-white hover:text-gray-200 hover:underline hover:underline-offset-4">Forgot Password?</Link>
                         </div>
                         <div className="text-center md:text-left">
-                            <button className={`mt-4 lg:ml-[70px] md:ml-[60px] w-[150px] px-4 py-2 text-black font-bold uppercase rounded text-xs tracking-wider${styles.flexCenter} bg-blue-gradient`} type="submit">Login</button>
+                            <button className={`mt-4 lg:ml-[70px] md:ml-[60px] w-[150px] px-4 py-2 font-bold uppercase rounded text-xs tracking-wider${styles.flexCenter} bg-blue-gradient`} type="submit">Login</button>
                         </div>
 
                         <div className="mt-4 lg:ml-[50px] md:ml-[45px] font-semibold text-sm text-slate-500 text-center md:text-left">

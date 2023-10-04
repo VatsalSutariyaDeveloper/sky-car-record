@@ -26,8 +26,8 @@ const ForgotPassword = () => {
         e.preventDefault();
         try {
             if (password === confirmPassword) {
-                const response = await axios.post("http://localhost:3000/auth/login", {'password':password,'userName':userName});
-                console.log("Login successful:", response);
+                const response = await axios.post("http://localhost:3000/auth/reset-password", {'password':password,'userName':userName});
+                navigate('/login');
             }
             else {
                 console.log('Passwords do not match.');
