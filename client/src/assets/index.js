@@ -17,6 +17,8 @@ import error404 from "./error404.svg";
 import datesearch from "./datesearch.svg";
 import nodata from "./nodata.svg";
 import carsearch from "./carsearch.svg";
+import openeye from "./openeye.svg";
+import closeeye from "./closeeye.svg";
 
 
 export {
@@ -38,5 +40,7 @@ export {
   datesearch,
   error404,
   nodata,
-  carsearch
+  carsearch,
+  closeeye,
+  openeye
 };

@@ -1,19 +1,20 @@
 const jwt = require("jsonwebtoken");
-const Constant = require("../config/Constant");
+const constant = require("../config/Constant");
+const User = require('../schema/UserSchema');
 
 function verifyToken(req, res, next) {
-  const token = req.headers.authorization;
-  
+  const token = req.cookies && req.cookies.jwt;
+
   if (!token) {
-    return res.status(401).json({ message: "No token provided" });
+    return res.json({ status: false, message: "No token provided" });
   }
 
-  jwt.verify(token, constant.SECRET_TOKEN_KEY, (err, decoded) => {
+  jwt.verify(token, constant.SECRET_TOKEN_KEY, async (err, decoded) => {
     if (err) {
-      return res.status(401).json({ message: "Invalid token" });
+      return res.json({ status: false, message: "Invalid token" });
     }
-
-    req.userId = decoded.userId;
-    next();
+    return res.json({ status: true, });
   });
 }
+
+module.exports = verifyToken;

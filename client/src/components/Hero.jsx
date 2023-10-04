@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from '../style';
 import { date, deletebtn, edit, carsearch, datesearch, nodata } from '../assets';
 import '../index.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
 import CustomTextField from './BookUser/CustomTextField';
@@ -11,6 +12,7 @@ const Hero = () => {
   const [bookings, setBookings] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:3000/car-booking')
@@ -192,6 +194,7 @@ const Hero = () => {
             </div>
           </section>
         </div>
+        <ToastContainer/>
       </div>
     </>
   );
