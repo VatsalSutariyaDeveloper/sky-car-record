@@ -38,3 +38,25 @@ exports.login = async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   };
+
+
+  exports.resetPassword = async (req, res) => {
+    const { userName, password } = req.body;
+    try {
+        const user = await User.findOne({ userName });
+
+        if (!user) {
+            return res.status(401).json({ message: "User not found" });
+        }
+        const saltRounds = 10; 
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        res.status(200).json({ message: "Password reset successfully" });
+    } catch (error) {
+        console.error("Reset Password error:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};
