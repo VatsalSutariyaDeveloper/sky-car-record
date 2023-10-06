@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../style';
+import Navbar from './Navbar';
 import { carimage, deletebtn, edit, carsearch, nodata,addcarcolored  } from '../assets';
 import { Link, useNavigate } from 'react-router-dom';
 import iziToast from 'izitoast';
@@ -128,6 +129,7 @@ const AllCars = () => {
 
   return (
     <div>
+      <Navbar />
       <div className={`bg-primary`}>
         <section id="home" className={`md:flex-row flex-col ${styles.paddingY}`}>
           <div className={`${styles.flexCenter} flex-col xl:px-0 sm:px-16 pb-4`}>

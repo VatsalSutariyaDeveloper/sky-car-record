@@ -86,11 +86,6 @@ const Login = () => {
                         <img
                             src="https://etimg.etb2bimg.com/photo/97338754.cms"
                             alt="Sample image"
-                            className='animate-login-image login-image md:hidden'
-                        />
-                        <img
-                            src={loginimage}
-                            alt="Sample image"
                             className='animate-login-image login-image'
                         />
                     </div>

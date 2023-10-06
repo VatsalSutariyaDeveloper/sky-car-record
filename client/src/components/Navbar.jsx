@@ -43,14 +43,14 @@ const Navbar = () => {
           <img src="logo.png" className="h-8 mr-3" alt="skycar Logo" />
         </Link>
         <div className="flex md:order-2">
-          <Link to="add-booking">
+          <NavLink to="/add-booking">
             <button
               type="button"
               className="text-black bg-[#73cdd7] hover:bg-[#5fbdc7] focus:ring-4 focus:outline-none focus:ring-[#73cdd7] font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-[#73cdd7] dark:hover:bg-[#5fbdc7] dark:focus:ring-[#73cdd7]"
             >
               Book Car
             </button>
-          </Link>
+          </NavLink>
           <AddCarModal />
           <button
             data-collapse-toggle="navbar-sticky"

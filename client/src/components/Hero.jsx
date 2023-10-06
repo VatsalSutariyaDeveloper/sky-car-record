@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar'
 import styles from '../style';
 import { date, deletebtn, edit, carsearch, datesearch, nodata, reset, arrowup } from '../assets';
 import '../index.css';
@@ -136,6 +137,7 @@ const Hero = () => {
 
   return (
     <>
+    <Navbar />
       <div className={`bg-primary`}>
         <section
           id="home"

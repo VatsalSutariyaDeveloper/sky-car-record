@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../../index.css";
+import Navbar from '../Navbar';
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
@@ -148,6 +149,7 @@ const UpdateBooking = ({ match }) => {
 
   return (
     <>
+    <Navbar />
       <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
