@@ -13,13 +13,24 @@ module.exports = Object.freeze({
     MSG_FOR_CAR_DATA_UPDATE_SUCCEESFULL: "Car Data Update Successfull",
     MSG_FOR_CAR_DATA_DELETE_SUCCEESFULL: "Car Data Delete Successfull",
     MSG_FOR_CAR_DATA_NOT_FOUND: "Car Data not found",
-
-    // TOKEN
-    SECRET_TOKEN_KEY: "YVV",
-
+    
     // IMAGE CONSTANT
     MSG_FOR_UNSUPPORTED_FILE: "Unsupported file type",
     IMAGE_STORE_PATH: "./uploads/images",
-    VIDEO_STORE_PATH: "./uploads/videos"
+    VIDEO_STORE_PATH: "./uploads/videos",
 
+    //TOKEN MSG CONSTANT
+    MSG_FOR_VALID_TOKEN: "Valid token",
+    MSG_FOR_INVALID_TOKEN: "Invalid token",
+    MSG_FOR_UNAUTHORIZED_USER: "You are UnAuthorized",
+
+    //AUTH MSG CONSTANT
+    MSG_FOR_USER_NOT_FOUND: "User not found",
+    MSG_FOR_WRONG_PASSWORD: "Wrong password",
+    MSG_FOR_INTERNAL_SERVER_ERROR: "Internal server error",
+    MSG_FOR_PASSEORD_RESET_SUCCESSFULL: "Password reset successfully",
+
+    //DATABASE CONNECTION MSG CONSTANT
+    MSG_FOR_CONNECTION_ERROR: "Connection error:",
+    MSG_FOR_CONNECTION_SUCCESSFUL: "Connected Successfull!",
 });

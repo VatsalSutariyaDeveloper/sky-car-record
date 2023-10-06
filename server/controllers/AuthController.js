@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const creatToken = (id, maxAge) => {
-  return jwt.sign({id},constant.SECRET_TOKEN_KEY,{
+  return jwt.sign({id},process.env.SECRET_TOKEN_KEY,{
     expiresIn:maxAge
   })
 } 
@@ -16,12 +16,12 @@ exports.login = async (req, res) => {
       const user = await User.findOne({ userName });
 
       if (!user) {
-        return res.status(401).json({ message: "User not found" });
+        return res.json({ status:false, message: constant.MSG_FOR_USER_NOT_FOUND });
       }
         const passwordMatch = await bcrypt.compare(password, user.password);
   
       if (!passwordMatch) {
-        return res.status(401).json({ message: "Invalid password" });
+        return res.json({ status:false, message: constant.MSG_FOR_WRONG_PASSWORD });
       }
   
       const maxAge = rememberMe == false ? 50 * 365 * 24 * 60 * 60 : 5 * 24 * 60 * 60;
@@ -32,10 +32,9 @@ exports.login = async (req, res) => {
         httpOnly: false,
         maxAge: maxAge * 1000,
       });
-      res.status(200).json({ user: user._id, created:true });
+      res.status(200).json({ status:true, user: user._id, created:true });
     } catch (error) {
-      console.error("Login error:", error);
-      res.status(500).json({ message: "Internal server error" });
+      res.json({ status:false, message: constant.MSG_FOR_INTERNAL_SERVER_ERROR, error:error });
     }
   };
 
@@ -46,7 +45,7 @@ exports.login = async (req, res) => {
         const user = await User.findOne({ userName });
 
         if (!user) {
-            return res.status(401).json({ message: "User not found" });
+            return res.json({ status:false, message: constant.MSG_FOR_USER_NOT_FOUND });
         }
         const saltRounds = 10; 
         const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -54,9 +53,8 @@ exports.login = async (req, res) => {
         user.password = hashedPassword;
         await user.save();
 
-        res.status(200).json({ message: "Password reset successfully" });
+        res.status(200).json({ status:true, message: constant.MSG_FOR_PASSEORD_RESET_SUCCESSFULL });
     } catch (error) {
-        console.error("Reset Password error:", error);
-        res.status(500).json({ message: "Internal server error" });
+        res.json({ status:false, message: constant.MSG_FOR_INTERNAL_SERVER_ERROR, error:error });
     }
 };

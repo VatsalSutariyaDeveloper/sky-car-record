@@ -16,7 +16,17 @@ const Hero = () => {
     fetch('http://localhost:3000/car-booking')
       .then((response) => response.json())
       .then((data) => setBookings(data.data))
-      .catch((error) => console.error('Error fetching data:', error));
+      .catch((error) =>
+        toast.error(error, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        }))
   }, []);
 
   function formatDate(dateString) {
@@ -69,14 +79,47 @@ const Hero = () => {
 
   const performDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3000/car-booking/${id}`, {
+      const response = await fetch(`http://localhost:3000/car-booking/${id}`, {
         method: 'DELETE',
       });
-
+      
+      if(!response.data.status){
+        toast.success(response.data.message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+      });
+      }
+      else{
+        toast.error(response.data.message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
+      }
       // Remove the deleted booking from the state
       setBookings((prevBookings) => prevBookings.filter((booking) => booking._id !== id));
     } catch (error) {
-      console.error('Error deleting booking:', error);
+      toast.error(error, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      })
     }
   };
 
@@ -179,7 +222,7 @@ const Hero = () => {
             </div>
           </section>
         </div>
-        <ToastContainer/>
+        <ToastContainer />
       </div>
     </>
   );

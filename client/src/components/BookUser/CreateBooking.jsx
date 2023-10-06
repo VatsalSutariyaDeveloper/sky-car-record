@@ -63,23 +63,37 @@ const CreateBooking = () => {
       try {
         const response = await axios.post('http://localhost:3000/car-booking', formData);
         stopLoading();
-        toast.success(response.data.message, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        });
+        if (!response.data.status) {
+          toast.error(response.data.message, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
+        }
+        else {
+          toast.success(response.data.message, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
 
-        resetForm();
-        startLoading();
-        setTimeout(() => {
-          stopLoading();
-          navigate('/');
-        }, 1000);
+          resetForm();
+          startLoading();
+          setTimeout(() => {
+            stopLoading();
+            navigate('/');
+          }, 1000);
+        }
       } catch (error) {
         stopLoading();
 

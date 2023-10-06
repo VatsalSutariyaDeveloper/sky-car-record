@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from '../../style';
-
+import { ToastContainer, toast } from 'react-toastify';
 import { openeye, closeeye } from '../../assets';
 import axios from 'axios';
 
@@ -27,14 +27,56 @@ const ForgotPassword = () => {
         try {
             if (password === confirmPassword) {
                 const response = await axios.post("http://localhost:3000/auth/reset-password", {'password':password,'userName':userName});
-                navigate('/login');
+                if(!response.data.status){
+                    toast.error(response.data.message, {
+                        position: 'top-right',  
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'dark',
+                    }); 
+                }
+                else{
+                    toast.success(response.data.message, {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'dark',
+                    });
+                    navigate('/login');
+                }
             }
             else {
-                console.log('Passwords do not match.');
+                toast.error('Passwords do not match.', {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });   
             }
         }
         catch (error) {
-            console.log('An error occurred while resetting the password.');
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+            });
         }
     };
 

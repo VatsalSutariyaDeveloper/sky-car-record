@@ -29,7 +29,18 @@ const UpdateBooking = ({ match }) => {
     fetch(`http://localhost:3000/car-booking/${id}`)
       .then((response) => response.json())
       .then((data) => setFormData(data.data))
-      .catch((error) => console.error('Error fetching data:', error));
+      .catch((error) =>
+        toast.error(error, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        })
+      );
   }, [id]);
 
   const handleChange = (name, value) => {
@@ -64,32 +75,46 @@ const UpdateBooking = ({ match }) => {
       try {
         const response = await axios.put(`http://localhost:3000/car-booking/${id}`, formData); // Replace with your actual API endpoint
         stopLoading();
-        toast.success(response.data.message, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        });
+        if (!response.data.message) {
+          toast.error(response.data.message, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
+        }
+        else {
+          toast.success(response.data.message, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
 
-        setFormData({
-          clientName: '',
-          dealerName: '',
-          carName: '',
-          numberPlate: '',
-          price: '',
-          destination: '',
-          bookingDate: '',
-          returnDate: '',
-        });
-        startLoading();
-        setTimeout(() => {
-          stopLoading();
-          navigate('/');
-        }, 1000);
+          setFormData({
+            clientName: '',
+            dealerName: '',
+            carName: '',
+            numberPlate: '',
+            price: '',
+            destination: '',
+            bookingDate: '',
+            returnDate: '',
+          });
+          startLoading();
+          setTimeout(() => {
+            stopLoading();
+            navigate('/');
+          }, 1000);
+        }
       } catch (error) {
         stopLoading();
 
@@ -123,7 +148,7 @@ const UpdateBooking = ({ match }) => {
 
   return (
     <>
-     <ToastContainer />
+      <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <div className='p-3 md:p-6 flex'>
