@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route } from "react-router-dom";
 import Login from "./components/Auth/Login";
-import CreateBooking from "./components/BookUser/CreateBooking";
-import UpdateBooking from "./components/BookUser/UpdateBooking";
+import CreateBooking from "./components/BookCar/CreateBooking";
+import UpdateBooking from "./components/BookCar/UpdateBooking";
 import ForgotPassword from './components/Auth/ForgotPassword';
 import Error404 from "./components/Error404";
 import AllCars from './components/AllCars';

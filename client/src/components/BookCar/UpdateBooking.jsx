@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../../index.css";
-import Navbar from '../Navbar';
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
@@ -30,18 +29,7 @@ const UpdateBooking = ({ match }) => {
     fetch(`http://localhost:3000/car-booking/${id}`)
       .then((response) => response.json())
       .then((data) => setFormData(data.data))
-      .catch((error) =>
-        toast.error(error, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-      );
+      .catch((error) => console.error('Error fetching data:', error));
   }, [id]);
 
   const handleChange = (name, value) => {
@@ -76,46 +64,32 @@ const UpdateBooking = ({ match }) => {
       try {
         const response = await axios.put(`http://localhost:3000/car-booking/${id}`, formData); // Replace with your actual API endpoint
         stopLoading();
-        if (!response.data.message) {
-          toast.error(response.data.message, {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-          });
-        }
-        else {
-          toast.success(response.data.message, {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-          });
+        toast.success(response.data.message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
 
-          setFormData({
-            clientName: '',
-            dealerName: '',
-            carName: '',
-            numberPlate: '',
-            price: '',
-            destination: '',
-            bookingDate: '',
-            returnDate: '',
-          });
-          startLoading();
-          setTimeout(() => {
-            stopLoading();
-            navigate('/');
-          }, 1000);
-        }
+        setFormData({
+          clientName: '',
+          dealerName: '',
+          carName: '',
+          numberPlate: '',
+          price: '',
+          destination: '',
+          bookingDate: '',
+          returnDate: '',
+        });
+        startLoading();
+        setTimeout(() => {
+          stopLoading();
+          navigate('/');
+        }, 1000);
       } catch (error) {
         stopLoading();
 
@@ -149,8 +123,7 @@ const UpdateBooking = ({ match }) => {
 
   return (
     <>
-    <Navbar />
-      <ToastContainer />
+     <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <div className='p-3 md:p-6 flex'>
@@ -167,8 +140,8 @@ const UpdateBooking = ({ match }) => {
             <div className="md:grid md:grid-cols-2 md:gap-2">
               <CustomTextField type="text" label="Client Name" name="clientName" value={formData.clientName} onChange={handleChange} />
               <CustomTextField type="text" label="Dealer Name" name="dealerName" value={formData.dealerName} onChange={handleChange} />
-              <CustomTextField type="selectbox" label="Car Name" name="carName" value={formData.carName} onChange={handleChange} />
-              <CustomTextField type="selectbox" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
+              <CustomTextField type="text" label="Car Name" name="carName" value={formData.carName} onChange={handleChange} />
+              <CustomTextField type="text" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
               <CustomTextField type="number" label="Price" name="price" value={formData.price} onChange={handleChange} />
               <CustomTextField type="text" label="Destination" name="destination" value={formData.destination} onChange={handleChange} />
               <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} />
