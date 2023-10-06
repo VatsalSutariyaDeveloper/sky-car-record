@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { close, menu } from '../assets';
-import styles from '../style';
 import { useCookies } from 'react-cookie'
+import AddCarModal from './AddCarModal';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
   const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies([]);
-  const logout = () =>{
+  
+
+  const logout = () => {
     removeCookie('jwt');
     navigate('/login')
   }
@@ -21,10 +23,9 @@ const Navbar = () => {
   const closeNavbar = () => {
     setToggle(false);
   };
-  
 
   return (
-    <nav className="bg-primary sticky top-0">
+    <nav className="bg-primary sticky top-0 z-50">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/">
           <img src="logo.png" className="h-8 mr-3" alt="skycar Logo" />
@@ -38,6 +39,7 @@ const Navbar = () => {
               Book Car
             </button>
           </Link>
+          <AddCarModal />
           <button
             data-collapse-toggle="navbar-sticky"
             type="button"
@@ -55,20 +57,18 @@ const Navbar = () => {
           </button>
         </div>
         <div
-          className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${
-            toggle ? 'block' : 'hidden'
-          }`}
+          className={`items-center justify-between w-full md:flex md:w-auto md:order-1 ${toggle ? 'block' : 'hidden'
+            }`}
           id="navbar-sticky"
         >
-          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-primary dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
+          <ul className="flex flex-col p-4 md:p-0 mt-4 font-medium border border-gray-100 rounded-lg bg-[#202938] md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-primary dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
             <li>
               <NavLink
                 exact="true"
                 to="/"
                 activeclassname="active"
-                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${
-                  location.pathname === '/' ? 'text-[#5fbdc7]' : ''
-                }`}
+                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${location.pathname === '/' ? 'text-[#5fbdc7]' : ''
+                  }`}
                 aria-current="page"
                 onClick={closeNavbar}
               >
@@ -79,22 +79,33 @@ const Navbar = () => {
               <NavLink
                 to="/add-booking"
                 activeclassname="active"
-                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${
-                  location.pathname === '/add-booking' ? 'text-[#5fbdc7]' : ''
-                }`}
+                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 ${location.pathname === '/add-booking' ? 'text-[#5fbdc7]' : ''
+                  }`}
                 onClick={closeNavbar}
               >
-                Add Car
+                Book Car
               </NavLink>
             </li>
             <li>
-              <button  activeclassname="active" // You can apply a different style for the active logout link
-                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700`}
+              <NavLink
+                to="/all-cars"
+                activeclassname="active"
+                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 ${location.pathname === '/all-cars' ? 'text-[#5fbdc7]' : ''
+                  }`}
+                onClick={closeNavbar}
+              >
+                All car List
+              </NavLink>
+            </li>
+            <li>
+              <button activeclassname="active"
+                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12`}
                 onClick={logout}>Log out</button>
             </li>
           </ul>
         </div>
       </div>
+
     </nav>
   );
 };

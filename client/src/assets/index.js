@@ -19,7 +19,12 @@ import nodata from "./nodata.svg";
 import carsearch from "./carsearch.svg";
 import openeye from "./openeye.svg";
 import closeeye from "./closeeye.svg";
-
+import forgotpass from './forgotpass.svg'
+import addcar from './addcar.svg'
+import addcarcolored from './addcarcolored.svg'
+import carimage from './carimage.svg'
+import reset from './reset.svg'
+import arrowup from './arrowup.svg'
 
 export {
   logo,
@@ -42,5 +47,11 @@ export {
   nodata,
   carsearch,
   closeeye,
-  openeye
+  openeye,
+  forgotpass,
+  addcar,
+  addcarcolored,
+  carimage,
+  reset,
+  arrowup
 };

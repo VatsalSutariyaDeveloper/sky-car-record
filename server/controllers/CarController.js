@@ -1,9 +1,10 @@
-const Car = require('../schema/CarSchama');
+const Cars = require('../schema/CarSchama');
 const constant = require('../config/Constant');
+const CarSchama = require('../schema/CarSchama');
 
 exports.index = async (req, res) => {
   try {
-    const car = await Car.find();
+    const car = await Cars.find();
     res.status(200).json({
         message : constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
         data : car
@@ -14,23 +15,17 @@ exports.index = async (req, res) => {
 };
 
 exports.store = async (req, res) => {
-  const { fullName, email, phoneNumber, course, hobbies, gender } = req.body;
-
-  const carData = {
-    fullName: fullName || '',
-    email: email || '',
-    phoneNumber: phoneNumber || '',
-    course: course || '',
-    hobbies: hobbies || '',
-    gender: gender || '',
-    profileImage: req.file ? req.file.filename : '', // Store the new file name in the database
-  };
+  const { carName, numberPlate } = req.body;
 
   try {
-    const car = await Car.create(carData);
+    const addCar = await Cars.create({
+      carName: carName,
+      numberPlate: numberPlate,
+    });
+
     res.status(201).json({
-        message: constant.MSG_FOR_ADD_CAR_DATA_SUCCEESFULL,
-        data:car
+      message: constant.MSG_FOR_BOOKING_SUCCEESFULL,
+      data: addCar,
     });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -40,8 +35,8 @@ exports.store = async (req, res) => {
 
 exports.show = async (req, res) => {
   try {
-    const car = await Car.findById(req.params.id);
-    if (!Car) {
+    const car = await Cars.findById(req.params.id);
+    if (!car) {
       res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     } else {
         res.status(200).json({
@@ -57,13 +52,9 @@ exports.show = async (req, res) => {
 exports.update = async (req, res) => {
   const { id } = req.params;
   
-  if (req.file) {
-    req.body.profileImage = req.file.filename; 
-  }
-  
   try {
-    const updatedCar = await Car.findByIdAndUpdate(id.trim(), req.body, {
-      new: true, // Return the updated document
+    const updatedCar = await Cars.findByIdAndUpdate(id.trim(), req.body, {
+      new: true,
     });
 
     if (!updatedCar) {
@@ -82,7 +73,7 @@ exports.update = async (req, res) => {
 exports.delete = async (req, res) => {
   const { id } = req.params;
   try {
-    const deletedCar = await Car.findByIdAndDelete(id);
+    const deletedCar = await Cars.findByIdAndDelete(id);
     if (!deletedCar) {
       res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     } else {
