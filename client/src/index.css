@@ -191,47 +191,18 @@ input::-webkit-inner-spin-button {
   border: 0px solid #ffffff;
 }
 
-.date-input {
-  background: linear-gradient(144.39deg,
-      #ffffff -278.56%,
-      #6d6d6d -78.47%,
-      #11101d 91.61%);
-  margin-bottom: 7px;
-  transform: translate(-0%, -0%);
-  position: unset;
-  font-family: "Roboto Mono", monospace;
-  color: #5ce1e6;
-  font-size: 14px;
-  width: 35px;
-  border: none;
-  outline: none;
-  background-image: url('./assets/datesearch.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
-.date-input::-webkit-inner-spin-button,
-.date-input::-webkit-calendar-picker-indicator {
-  display: none !important;
-  -webkit-appearance: none !important;
-}
-
-.date-input::-webkit-datetime-edit-text {
-  -webkit-appearance: none;
+::-webkit-inner-spin-button {
   display: none;
 }
 
-.date-input::-webkit-datetime-edit-month-field {
-  -webkit-appearance: none;
-  display: none;
+#datesearch::-webkit-inner-spin-button { 
+  display:none;
 }
-
-.date-input::-webkit-datetime-edit-day-field {
-  -webkit-appearance: none;
-  display: none;
-}
-
-.date-input::-webkit-datetime-edit-year-field {
-  -webkit-appearance: none;
-  display: none;
+#datesearch::-webkit-calendar-picker-indicator { background-color:transparent}
+#datesearch::-webkit-calendar-picker-indicator{ 
+  background-image: url("./assets/datesearch.svg");
+      background-position:center;
+       background-size:20px 20px;
+       background-repeat:no-repeat;
+      color:rgba(204,204,204,0);
 }
