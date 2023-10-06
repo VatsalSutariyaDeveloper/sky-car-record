@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { close, menu } from '../assets';
 import { useCookies } from 'react-cookie'
 import AddCarModal from './AddCarModal';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -12,6 +13,16 @@ const Navbar = () => {
   
 
   const logout = () => {
+    toast.success("Logout successfully", {
+      position: 'top-right',
+      autoClose: 5000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'dark',
+    });
     removeCookie('jwt');
     navigate('/login')
   }
@@ -25,7 +36,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-primary sticky top-0 z-50">
+    <nav className="bg-primary sticky top-0">
+      <ToastContainer/>
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/">
           <img src="logo.png" className="h-8 mr-3" alt="skycar Logo" />
@@ -79,7 +91,7 @@ const Navbar = () => {
               <NavLink
                 to="/add-booking"
                 activeclassname="active"
-                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 ${location.pathname === '/add-booking' ? 'text-[#5fbdc7]' : ''
+                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${location.pathname === '/add-booking' ? 'text-[#5fbdc7]' : ''
                   }`}
                 onClick={closeNavbar}
               >

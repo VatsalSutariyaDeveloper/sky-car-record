@@ -83,3 +83,31 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+exports.carNames = async (req, res) => {
+  try {
+    const cars = await Car.find({}, 'carName'); 
+    const carNames = cars.map((car) => car.carName);
+    res.status(200).json({
+      status: true,
+      message: constant.MSG_FOR_GET_CAR_NAMES_SUCCESSFULLY,
+      data: carNames,
+    });
+  } catch (error) {
+    res.json({ status: false, message: error.message });
+  }
+};
+
+exports.numberPlates = async (req, res) => {
+  try {
+    const cars = await Car.find({}, 'numberPlate'); 
+    const numberPlates = cars.map((car) => car.numberPlate);
+    res.status(200).json({
+      status: true,
+      message: constant.MSG_FOR_GET_NUMBER_PLATES_SUCCESSFULLY,
+      data: numberPlates,
+    });
+  } catch (error) {
+    resizeTo.json({ status: false, message: error.message });
+  }
+};
+

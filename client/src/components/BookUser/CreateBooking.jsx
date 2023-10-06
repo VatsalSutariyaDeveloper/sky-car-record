@@ -63,23 +63,37 @@ const CreateBooking = () => {
       try {
         const response = await axios.post('http://localhost:3000/car-booking', formData);
         stopLoading();
-        toast.success(response.data.message, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        });
+        if (!response.data.status) {
+          toast.error(response.data.message, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
+        }
+        else {
+          toast.success(response.data.message, {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
 
-        resetForm();
-        startLoading();
-        setTimeout(() => {
-          stopLoading();
-          navigate('/');
-        }, 1000);
+          resetForm();
+          startLoading();
+          setTimeout(() => {
+            stopLoading();
+            navigate('/');
+          }, 1000);
+        }
       } catch (error) {
         stopLoading();
 
@@ -130,8 +144,8 @@ const CreateBooking = () => {
             <div className='md:grid md:grid-cols-2 md:gap-2'>
               <CustomTextField type='text' label='Client Name' name='clientName' value={formData.clientName} onChange={handleChange} />
               <CustomTextField type='text' label='Dealer Name' name='dealerName' value={formData.dealerName} onChange={handleChange} />
-              <CustomTextField type='text' label='Car Name' name='carName' value={formData.carName} onChange={handleChange} />
-              <CustomTextField type='text' label='Number Plate' name='numberPlate' value={formData.numberPlate} onChange={handleChange} />
+              <CustomTextField type='selectbox' label='Car Name' name='carName' value={formData.carName} onChange={handleChange} />
+              <CustomTextField type='selectbox' label='Number Plate' name='numberPlate' value={formData.numberPlate} onChange={handleChange} />
               <CustomTextField type='number' label='Price' name='price' value={formData.price} onChange={handleChange} />
               <CustomTextField type='text' label='Destination' name='destination' value={formData.destination} onChange={handleChange} />
               <CustomTextField type='date' label='Booking Date' name='bookingDate' value={formData.bookingDate} onChange={handleChange} minDate={currentDate} />

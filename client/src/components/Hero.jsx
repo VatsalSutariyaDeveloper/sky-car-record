@@ -131,6 +131,7 @@ const Hero = () => {
     };
   }, []);
 
+
   return (
     <>
       <div className={`bg-primary`}>
@@ -185,7 +186,7 @@ const Hero = () => {
                           </td>
                           <td>
                             <div className='flex justify-end mr-2'>
-                              <Link to={`/update-booking/${booking._id}`}>
+                              <Link to={`/edit-booking/${booking._id}`}>
                                 <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:scale-125 transition duration-300' />
                               </Link>
                               <img

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import styles from '../../style';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';
-
+import { useNavigate,Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
 import { openeye, closeeye } from '../../assets';
 
 const Login = () => {
@@ -38,15 +38,48 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post("http://localhost:3000/auth/login", formData, { withCredentials: true });
-            console.log("Login successful:", response);
-            navigate('/');
+            if(!response.data.status){
+                toast.error(response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });   
+            }
+            else{
+                toast.success(response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });
+                navigate('/');
+            }
         } catch (error) {
-            console.error("Login error:", error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+            });
         }
     };
 
     return (
-        <section className={`bg-primary`}>
+        <section className={`bg-primary ${styles.flexStart}`}>
+            <ToastContainer />
             <form onSubmit={handleSubmit}>
                 <div className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
                     <div className="md:w-1/3 md:-mt-[10px] max-w-sm -mt-36 lg:-mt-0">
