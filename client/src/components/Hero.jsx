@@ -6,23 +6,50 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import CustomTextField from './BookUser/CustomTextField';
+import CustomTextField from './BookCar/CustomTextField';
 
 const Hero = () => {
   const [bookings, setBookings] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [filteredBookings, setFilteredBookings] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   
   const navigate = useNavigate();
+
+const handleSearchInputChange = (event) => {
+  const searchValue = event.target.value;
+  setSearchInput(searchValue);
+  filterBookings(searchValue, selectedDate);
+};
+
+const handleDateChange = (event) => {
+  const selectedDateString = event.target.value;
+  setSelectedDate(selectedDateString);
+  filterBookings(searchInput, selectedDateString);
+};
+
+const filterBookings = (searchValue, selectedDateString) => {
+  const filtered = bookings.filter((booking) => {
+    const bookingDate = new Date(booking.bookingDate).toISOString().split('T')[0];
+    const bookingCarName = booking.carName?.toLowerCase() || '';
+    const dateMatch = !selectedDateString || bookingDate === selectedDateString;
+
+    const searchMatch =
+      bookingCarName.includes(searchValue.toLowerCase())
+    return dateMatch && searchMatch;
+  });
+
+  setFilteredBookings(filtered);
+};
 
   useEffect(() => {
     fetch('http://localhost:3000/car-booking')
       .then((response) => response.json())
       .then((data) => {
         setBookings(data.data);
-        setFilteredBookings(data.data); // Initialize filteredBookings with all bookings
+        setFilteredBookings(data.data);
       })
       .catch((error) => console.error('Error fetching data:', error));
   }, []);
@@ -32,11 +59,6 @@ const Hero = () => {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   }
-
-  // Event handler for updating search input value
-  const handleSearchInputChange = (event) => {
-    setSearchInput(event.target.value);
-  };
 
   const deleteBooking = (id) => {
     iziToast.question({
@@ -56,7 +78,6 @@ const Hero = () => {
           function (instance, toast) {
             instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
 
-            // Perform the deletion after user confirmation
             performDelete(id);
           },
           true,
@@ -77,25 +98,12 @@ const Hero = () => {
         method: 'DELETE',
       });
 
-      // Remove the deleted booking from the state
       setBookings((prevBookings) => prevBookings.filter((booking) => booking._id !== id));
     } catch (error) {
       console.error('Error deleting booking:', error);
     }
   };
 
-  const handleDateChange = (event) => {
-    const selectedDateString = event.target.value;
-
-    setSelectedDate(selectedDateString);
-
-    const filtered = bookings.filter((booking) => {
-      const bookingDate = new Date(booking.bookingDate).toISOString().split('T')[0];
-      return bookingDate === selectedDateString;
-    });
-
-    setFilteredBookings(filtered);
-  };
 
   return (
     <>
