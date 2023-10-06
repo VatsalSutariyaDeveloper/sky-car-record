@@ -37,7 +37,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/auth/login", formData, { withCredentials: true });
+            const response = await axios.post(`${window.react_app_url}auth/login`, formData, { withCredentials: true });
             if (!response.data.status) {
                 toast.error(response.data.message, {
                     position: 'top-right',

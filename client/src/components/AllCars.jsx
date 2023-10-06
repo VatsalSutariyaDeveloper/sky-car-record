@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../style';
 import Navbar from './Navbar';
-import { carimage, deletebtn, edit, carsearch, nodata,addcarcolored  } from '../assets';
+import { carimage, deletebtn, edit, carsearch, nodata, addcarcolored } from '../assets';
 import { Link, useNavigate } from 'react-router-dom';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
@@ -16,7 +16,7 @@ const AllCars = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3000/car')
+    fetch(`${window.react_app_url}car`)
       .then((response) => response.json())
       .then((data) => setCars(data.data))
       .catch((error) => console.error('Error fetching data:', error));
@@ -27,7 +27,8 @@ const AllCars = () => {
   };
 
   const handleNumberPlateChange = (e) => {
-    setNumberPlate(e.target.value);
+    const value = e.target.value.toUpperCase();
+    setNumberPlate(value);
   };
 
   const handleSearchInputChange = (event) => {
@@ -71,7 +72,7 @@ const AllCars = () => {
 
   const performDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3000/car/${id}`, {
+      await fetch(`${window.react_app_url}car/${id}`, {
         method: 'DELETE',
       });
 
@@ -92,7 +93,7 @@ const AllCars = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:3000/car/${editCarId}`, {
+      const response = await fetch(`${window.react_app_url}car/${editCarId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

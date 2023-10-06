@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import Navbar from "../Navbar"
 import '../../index.css';
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
@@ -61,7 +62,7 @@ const CreateBooking = () => {
       return;
     } else {
       try {
-        const response = await axios.post('http://localhost:3000/car-booking', formData);
+        const response = await axios.post(`${window.react_app_url}car-booking`, formData);
         stopLoading();
         toast.success(response.data.message, {
           position: 'top-right',
@@ -113,6 +114,7 @@ const CreateBooking = () => {
 
   return (
     <>
+    <Navbar />
       <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>

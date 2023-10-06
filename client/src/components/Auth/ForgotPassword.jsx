@@ -26,7 +26,7 @@ const ForgotPassword = () => {
         e.preventDefault();
         try {
             if (password === confirmPassword) {
-                const response = await axios.post("http://localhost:3000/auth/reset-password", {'password':password,'userName':userName});
+                const response = await axios.post(`${window.react_app_url}auth/reset-password`, {'password':password,'userName':userName});
                 if(!response.data.status){
                     toast.error(response.data.message, {
                         position: 'top-right',  

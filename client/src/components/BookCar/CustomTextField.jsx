@@ -5,7 +5,7 @@ const CustomTextField = ({ type, label, name, value, onChange, minDate }) => {
   function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
   
     return `${year}-${month}-${day}`;

@@ -15,7 +15,7 @@ const Auth = ({ element }) => {
             } else {
                 try {
                     // Verify the user's authentication status on the server
-                    const response = await axios.post('http://localhost:3000/auth', {}, { withCredentials: true });
+                    const response = await axios.post(`${window.react_app_url}auth`, {}, { withCredentials: true });
                     const data = response.data;
                     if (!data.status) {
                         removeCookie('jwt')

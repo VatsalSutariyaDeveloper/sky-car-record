@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../../index.css";
+import Navbar from '../Navbar';
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
@@ -26,7 +27,7 @@ const UpdateBooking = ({ match }) => {
     returnDate: '',
   });
   useEffect(() => {
-    fetch(`http://localhost:3000/car-booking/${id}`)
+    fetch(`${window.react_app_url}car-booking/${id}`)
       .then((response) => response.json())
       .then((data) => setFormData(data.data))
       .catch((error) => console.error('Error fetching data:', error));
@@ -62,7 +63,7 @@ const UpdateBooking = ({ match }) => {
       return;
     } else {
       try {
-        const response = await axios.put(`http://localhost:3000/car-booking/${id}`, formData); // Replace with your actual API endpoint
+        const response = await axios.put(`${window.react_app_url}car-booking/${id}`, formData); // Replace with your actual API endpoint
         stopLoading();
         toast.success(response.data.message, {
           position: 'top-right',
@@ -123,6 +124,7 @@ const UpdateBooking = ({ match }) => {
 
   return (
     <>
+    <Navbar />
      <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>

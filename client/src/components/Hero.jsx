@@ -19,8 +19,8 @@ const Hero = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:3000/car-booking')
-      .then((response) => response.json())
+    fetch(`${window.react_app_url}car-booking`)
+    .then((response) => response.json())
       .then((data) => {
         setBookings(data.data);
         setFilteredBookings(data.data);
@@ -97,7 +97,7 @@ const Hero = () => {
 
   const performDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3000/car-booking/${id}`, {
+      await fetch(`${window.react_app_url}car-booking/${id}`, {
         method: 'DELETE',
       });
 
@@ -137,7 +137,7 @@ const Hero = () => {
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <div className={`bg-primary`}>
         <section
           id="home"

@@ -25,7 +25,7 @@ const AddCarModal = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3000/car', { carName, numberPlate });
+            const response = await axios.post(`${window.react_app_url}car`, { carName, numberPlate });
             toast.success(response.data.message, {
                 position: 'top-right',
                 autoClose: 5000,
