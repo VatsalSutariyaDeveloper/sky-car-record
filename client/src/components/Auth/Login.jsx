@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../../style';
 import axios from 'axios';
-import { useNavigate,Link } from 'react-router-dom';
-
-import { openeye, closeeye } from '../../assets';
+import { useNavigate, Link } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import { openeye, closeeye, loginimage } from '../../assets';
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -38,25 +38,63 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post("http://localhost:3000/auth/login", formData, { withCredentials: true });
-            console.log("Login successful:", response);
-            navigate('/');
+            if (!response.data.status) {
+                toast.error(response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });
+            }
+            else {
+                toast.success(response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });
+                navigate('/');
+            }
         } catch (error) {
-            console.error("Login error:", error);
+            toast.error(error, {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+            });
         }
     };
 
     return (
         <section className={`bg-primary ${styles.flexStart}`}>
+            <ToastContainer />
             <form onSubmit={handleSubmit}>
                 <div className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
                     <div className="md:w-1/3 md:-mt-[10px] max-w-sm -mt-36 lg:-mt-0">
                         <img
-                            src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                            src="https://etimg.etb2bimg.com/photo/97338754.cms"
+                            alt="Sample image"
+                            className='animate-login-image login-image md:hidden'
+                        />
+                        <img
+                            src={loginimage}
                             alt="Sample image"
                             className='animate-login-image login-image'
                         />
                     </div>
-                    <div className="md:w-1/3 max-w-sm">
+                    <div className="">
                         <input
                             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
                             type="text"
@@ -65,52 +103,50 @@ const Login = () => {
                             value={formData.userName}
                             onChange={handleChange}
                         />
-                        <div className="relative">
-                            <input
-                                className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
-                                type={showPassword ? 'text' : 'password'} // Step 5: Dynamically set input type
-                                placeholder="Password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                            <button
-                                className="absolute right-2 top-[26px]"
-                                type="button"
-                                onClick={handleTogglePassword}
-                            >
-                                {showPassword ? (
-                                    <img
-                                        src={openeye}
-                                        alt="Hide Password"
-                                    />
-                                ) : (
-                                    <img
-                                        src={closeeye}
-                                        alt="Show Password"
-                                    />
-                                )}
-                            </button>
-                        </div>
-                        <div className="mt-4 flex justify-between font-semibold text-sm">
-                            <label className="flex text-white hover:text-slate-600 cursor-pointer">
-                                <input
-                                    className="mr-1"
-                                    type="checkbox"
-                                    name="rememberMe"
-                                    checked={formData.rememberMe}
-                                    onChange={handleCheckboxChange}
+                        <input
+                            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
+                        <button
+                            className="absolute right-2 top-[26px]"
+                            type="button"
+                            onClick={handleTogglePassword}
+                        >
+                            {showPassword ? (
+                                <img
+                                    src={openeye}
+                                    alt="Hide Password"
                                 />
-                                <span>Remember Me</span>
-                            </label>
-                            <Link to={`/forgot-password`} className="text-white hover:text-gray-200 hover:underline hover:underline-offset-4">Forgot Password?</Link>
+                            ) : (
+                                <img
+                                    src={closeeye}
+                                    alt="Show Password"
+                                />
+                            )}
+                        </button>
+                        <div className='flex flex-col'>
+                            <div className="mt-4 justify-between font-semibold text-sm">
+                                <label className="text-white hover:text-slate-600 cursor-pointer">
+                                    <input
+                                        className="mr-1"
+                                        type="checkbox"
+                                        name="rememberMe"
+                                        checked={formData.rememberMe}
+                                        onChange={handleCheckboxChange}
+                                    />
+                                    <span>Remember Me</span>
+                                </label>
+                            </div>
                         </div>
                         <div className="text-center md:text-left">
-                            <button className={`mt-4 lg:ml-[70px] md:ml-[60px] w-[150px] px-4 py-2 font-bold uppercase rounded text-xs tracking-wider${styles.flexCenter} bg-blue-gradient`} type="submit">Login</button>
+                            <button className={`mt-4 md:ml-[70px] md:w-60 w-[150px] px-4 py-2 font-bold uppercase rounded text-xs tracking-wider${styles.flexCenter} bg-blue-gradient`} type="submit">Login</button>
                         </div>
-
-                        <div className="mt-4 lg:ml-[50px] md:ml-[45px] font-semibold text-sm text-slate-500 text-center md:text-left">
-                            Add a new Member? <a className="text-red-600 hover:underline hover:underline-offset-4" href="#">Let's Add</a>
+                        <div className="mt-4 md:ml-[135px] font-semibold text-sm text-slate-500 text-center md:text-left">
+                            <Link to={`/forgot-password`} className="text-white hover:text-gray-200 hover:underline hover:underline-offset-4">Forgot Password?</Link>
                         </div>
                     </div>
                 </div>

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
+const constant = require('../config/Constant');
 
-mongoose.connect('mongodb://127.0.0.1:27017/sky_car_rental')
-  .then(() => console.log('Connected!'))
-  .catch(error => console.error('Connection error:', error));
+mongoose.connect(process.env.DB_URL)
+  .then(() => console.log(constant.MSG_FOR_CONNECTION_SUCCESSFUL))
+  .catch(error => console.error(constant.MSG_FOR_CONNECTION_ERROR, error));
