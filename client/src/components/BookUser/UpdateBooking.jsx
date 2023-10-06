@@ -165,8 +165,8 @@ const UpdateBooking = ({ match }) => {
             <div className="md:grid md:grid-cols-2 md:gap-2">
               <CustomTextField type="text" label="Client Name" name="clientName" value={formData.clientName} onChange={handleChange} />
               <CustomTextField type="text" label="Dealer Name" name="dealerName" value={formData.dealerName} onChange={handleChange} />
-              <CustomTextField type="text" label="Car Name" name="carName" value={formData.carName} onChange={handleChange} />
-              <CustomTextField type="text" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
+              <CustomTextField type="selectbox" label="Car Name" name="carName" value={formData.carName} onChange={handleChange} />
+              <CustomTextField type="selectbox" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
               <CustomTextField type="number" label="Price" name="price" value={formData.price} onChange={handleChange} />
               <CustomTextField type="text" label="Destination" name="destination" value={formData.destination} onChange={handleChange} />
               <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} />

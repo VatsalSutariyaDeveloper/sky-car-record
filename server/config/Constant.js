@@ -13,6 +13,8 @@ module.exports = Object.freeze({
     MSG_FOR_CAR_DATA_UPDATE_SUCCEESFULL: "Car Data Update Successfull",
     MSG_FOR_CAR_DATA_DELETE_SUCCEESFULL: "Car Data Delete Successfull",
     MSG_FOR_CAR_DATA_NOT_FOUND: "Car Data not found",
+    MSG_FOR_GET_CAR_NAMES_SUCCESSFULLY: "Cars Name Get Successfully",
+    MSG_FOR_GET_NUMBER_PLATES_SUCCESSFULLY: "Number Plates Get Successfully",
     
     // IMAGE CONSTANT
     MSG_FOR_UNSUPPORTED_FILE: "Unsupported file type",
