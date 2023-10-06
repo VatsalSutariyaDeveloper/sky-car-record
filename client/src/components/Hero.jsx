@@ -6,7 +6,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
-import CustomTextField from './BookUser/CustomTextField';
 
 const Hero = () => {
   const [bookings, setBookings] = useState([]);
@@ -14,6 +13,8 @@ const Hero = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [filteredBookings, setFilteredBookings] = useState([]);
+  const [visibleItems, setVisibleItems] = useState(2);
+  const [itemsToLoad, setItemsToLoad] = useState(2);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -53,17 +54,14 @@ const Hero = () => {
   };
 
   const resetDateFilter = () => {
-    setSelectedDate(''); 
-    filterBookings(searchInput, ''); 
+    setSelectedDate('');
+    filterBookings(searchInput, '');
   };
 
   function formatDate(dateString) {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   }
-
-
-  const reversedFilteredBookings = [...filteredBookings].reverse();
 
   const deleteBooking = (id) => {
     iziToast.question({
@@ -76,7 +74,7 @@ const Hero = () => {
       title: 'Confirmation',
       message: 'Are you sure you want to delete this user?',
       position: 'center',
-      color: 'red',
+      color: 'cyan',
       buttons: [
         [
           '<button><b>Yes</b></button>',
@@ -126,11 +124,15 @@ const Hero = () => {
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
-      // Remove the event listener when the component unmounts
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
+  const visibleBookings = filteredBookings.slice(0, visibleItems);
+
+  const loadMore = () => {
+    setVisibleItems(visibleItems + itemsToLoad);
+  };
 
   return (
     <>
@@ -166,13 +168,13 @@ const Hero = () => {
                 </div>
               </div>
             </div>
-            {filteredBookings.length === 0 ? (
+            {visibleBookings.length === 0 ? (
               <div className="">
                 <img src={nodata} alt="" className='md:h-screen h-96 md:-mt-0 sm:-mt-0' />
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {reversedFilteredBookings.map((booking) => (
+                {visibleBookings.map((booking) => (
                   <div
                     key={booking._id}
                     className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]"
@@ -186,7 +188,7 @@ const Hero = () => {
                           </td>
                           <td>
                             <div className='flex justify-end mr-2'>
-                              <Link to={`/edit-booking/${booking._id}`}>
+                              <Link to={`/update-booking/${booking._id}`}>
                                 <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:scale-125 transition duration-300' />
                               </Link>
                               <img
@@ -233,6 +235,16 @@ const Hero = () => {
               </div>
             )}
           </div>
+          {visibleItems < filteredBookings.length && (
+            <div className="flex justify-center mt-4">
+              <button
+                className="bg-[#5fbdc7] hover:bg-[#54b1bc] font-bold py-2 px-4 rounded"
+                onClick={loadMore}
+              >
+                Load More
+              </button>
+            </div>
+          )}
         </section>
       </div>
       {showBackToTop && (

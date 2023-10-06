@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styles from '../../style';
 import axios from 'axios';
-import { useNavigate,Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
-import { openeye, closeeye } from '../../assets';
+import { openeye, closeeye, loginimage } from '../../assets';
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -38,7 +38,7 @@ const Login = () => {
         e.preventDefault();
         try {
             const response = await axios.post("http://localhost:3000/auth/login", formData, { withCredentials: true });
-            if(!response.data.status){
+            if (!response.data.status) {
                 toast.error(response.data.message, {
                     position: 'top-right',
                     autoClose: 5000,
@@ -48,9 +48,9 @@ const Login = () => {
                     draggable: true,
                     progress: undefined,
                     theme: 'dark',
-                });   
+                });
             }
-            else{
+            else {
                 toast.success(response.data.message, {
                     position: 'top-right',
                     autoClose: 5000,
@@ -84,12 +84,17 @@ const Login = () => {
                 <div className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
                     <div className="md:w-1/3 md:-mt-[10px] max-w-sm -mt-36 lg:-mt-0">
                         <img
-                            src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                            src="https://etimg.etb2bimg.com/photo/97338754.cms"
+                            alt="Sample image"
+                            className='animate-login-image login-image md:hidden'
+                        />
+                        <img
+                            src={loginimage}
                             alt="Sample image"
                             className='animate-login-image login-image'
                         />
                     </div>
-                    <div className="md:w-1/3 max-w-sm">
+                    <div className="">
                         <input
                             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
                             type="text"
@@ -98,33 +103,31 @@ const Login = () => {
                             value={formData.userName}
                             onChange={handleChange}
                         />
-                        <div className="relative">
-                            <input
-                                className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
-                                type={showPassword ? 'text' : 'password'}
-                                placeholder="Password"
-                                name="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                            />
-                            <button
-                                className="absolute right-2 top-[26px]"
-                                type="button"
-                                onClick={handleTogglePassword}
-                            >
-                                {showPassword ? (
-                                    <img
-                                        src={openeye}
-                                        alt="Hide Password"
-                                    />
-                                ) : (
-                                    <img
-                                        src={closeeye}
-                                        alt="Show Password"
-                                    />
-                                )}
-                            </button>
-                        </div>
+                        <input
+                            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
+                            type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                        />
+                        <button
+                            className="absolute right-2 top-[26px]"
+                            type="button"
+                            onClick={handleTogglePassword}
+                        >
+                            {showPassword ? (
+                                <img
+                                    src={openeye}
+                                    alt="Hide Password"
+                                />
+                            ) : (
+                                <img
+                                    src={closeeye}
+                                    alt="Show Password"
+                                />
+                            )}
+                        </button>
                         <div className='flex flex-col'>
                             <div className="mt-4 justify-between font-semibold text-sm">
                                 <label className="text-white hover:text-slate-600 cursor-pointer">

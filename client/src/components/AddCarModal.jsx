@@ -17,12 +17,13 @@ const AddCarModal = () => {
     };
 
     const handleNumberPlateChange = (e) => {
-        setNumberPlate(e.target.value);
+        const value = e.target.value.toUpperCase();
+        setNumberPlate(value);
     };
 
     const handleAddCar = async (e) => {
         e.preventDefault();
-        
+
         try {
             const response = await axios.post('http://localhost:3000/car', { carName, numberPlate });
             toast.success(response.data.message, {

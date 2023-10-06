@@ -25,6 +25,7 @@ import addcarcolored from './addcarcolored.svg'
 import carimage from './carimage.svg'
 import reset from './reset.svg'
 import arrowup from './arrowup.svg'
+import loginimage from './loginimage.svg'
 
 export {
   logo,
@@ -53,5 +54,6 @@ export {
   addcarcolored,
   carimage,
   reset,
-  arrowup
+  arrowup,
+  loginimage
 };

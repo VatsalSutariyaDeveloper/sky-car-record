@@ -36,7 +36,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-primary sticky top-0">
+    <nav className="bg-primary sticky top-0 z-50">
       <ToastContainer/>
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/">
@@ -88,10 +88,10 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
-              <NavLink
+            <NavLink
                 to="/add-booking"
                 activeclassname="active"
-                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 md:dark:hover:text-[#5fbdc7] dark:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700 ${location.pathname === '/add-booking' ? 'text-[#5fbdc7]' : ''
+                className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 ${location.pathname === '/add-booking' ? 'text-[#5fbdc7]' : ''
                   }`}
                 onClick={closeNavbar}
               >
