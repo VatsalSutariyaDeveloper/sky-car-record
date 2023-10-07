@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from '../../style';
 import { ToastContainer, toast } from 'react-toastify';
-import { openeye, closeeye } from '../../assets';
+import { openeye, closeeye ,forgotpass} from '../../assets';
 import axios from 'axios';
 
 const ForgotPassword = () => {
@@ -87,7 +87,7 @@ const ForgotPassword = () => {
                     <div className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
                         <div className="md:w-1/3 md:-mt-[10px] max-w-sm -mt-36 lg:-mt-0">
                             <img
-                                src="https://tecdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+                                src={forgotpass}
                                 alt="Sample image"
                                 className='animate-login-image login-image'
                             />

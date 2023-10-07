@@ -22,7 +22,7 @@ const CreateBooking = () => {
     price: '',
     destination: '',
     bookingDate: currentDate,
-    returnDate: '',
+    returnDate: '', 
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -49,7 +49,7 @@ const CreateBooking = () => {
 
     if (missingFields.length > 0) {
       stopLoading();
-      toast.warning('Please Enter Fill all Data', {
+      toast.warning('Please fill in all required fields.', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: true,
@@ -60,10 +60,41 @@ const CreateBooking = () => {
         theme: 'dark',
       });
       return;
-    } else {
-      try {
-        const response = await axios.post(`${window.react_app_url}car-booking`, formData);
-        stopLoading();
+    }
+
+    const bookingDate = new Date(formData.bookingDate);
+    const returnDate = new Date(formData.returnDate);
+
+    if (returnDate <= bookingDate) {
+      stopLoading();
+      toast.error('Return date must be greater than booking date.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:3000/car-booking', formData);
+      stopLoading();
+      if (!response.data.status) {
+        toast.error(response.data.message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+      } else {
         toast.success(response.data.message, {
           position: 'top-right',
           autoClose: 5000,
@@ -81,40 +112,40 @@ const CreateBooking = () => {
           stopLoading();
           navigate('/');
         }, 1000);
-      } catch (error) {
-        stopLoading();
-
-        if (error.response && error.response.data) {
-          toast.error(error.response.data.message, {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-          });
-        } else {
-          toast.error('An error occurred while processing your request.', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-          });
-        }
-        console.error('Error:', error);
       }
+    } catch (error) {
+      stopLoading();
+
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+      } else {
+        toast.error('An error occurred while processing your request.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+      }
+      console.error('Error:', error);
     }
   };
 
   return (
     <>
-    <Navbar />
+      <Navbar />
       <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>

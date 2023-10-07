@@ -93,7 +93,6 @@ const UpdateBooking = ({ match }) => {
         }, 1000);
       } catch (error) {
         stopLoading();
-
         if (error.response && error.response.data) {
           toast.error(error.response.data.message, {
             position: 'top-right',
@@ -146,7 +145,7 @@ const UpdateBooking = ({ match }) => {
               <CustomTextField type="text" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
               <CustomTextField type="number" label="Price" name="price" value={formData.price} onChange={handleChange} />
               <CustomTextField type="text" label="Destination" name="destination" value={formData.destination} onChange={handleChange} />
-              <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} />
+              <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} />
               <CustomTextField type="date" label="Return Date" name="returnDate" value={formData.returnDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} />
             </div>
             <div className='flex justify-center'>

@@ -8,7 +8,9 @@ import Error404 from "./components/Error404";
 import AllCars from './components/AllCars';
 import Hero from './components/Hero'
 import { Auth, AuthGuard } from "./components/Auth"; 
+
 window.react_app_url = "http://localhost:3000/"
+
 const App = () => {
   return (
     <>

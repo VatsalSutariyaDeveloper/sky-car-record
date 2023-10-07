@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import '../../index.css'
 
 function useLoader() {
   const [loading, setLoading] = useState(false);
@@ -13,7 +14,7 @@ function useLoader() {
 
   const Loader = () => {
     return loading ? (
-      <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50'>
+      <div className='fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 fade-loader'>
         <div role='status'>
           <div className='w-12 h-12 rounded-full animate-spin border-x-2 border-solid border-[#5fbdc7] border-t-transparent'></div>
         </div>

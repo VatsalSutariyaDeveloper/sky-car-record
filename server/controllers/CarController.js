@@ -6,8 +6,8 @@ exports.index = async (req, res) => {
   try {
     const car = await Cars.find();
     res.status(200).json({
-        message : constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
-        data : car
+      message: constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
+      data: car
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -18,6 +18,16 @@ exports.store = async (req, res) => {
   const { carName, numberPlate } = req.body;
 
   try {
+    const existingCar = await Cars.findOne({
+      $or: [{ carName }, { numberPlate }],
+    });
+
+    if (existingCar) {
+      return res.status(400).json({
+        message: 'Car name or Number plate already exists.',
+      });
+    }
+
     const addCar = await Cars.create({
       carName: carName,
       numberPlate: numberPlate,
@@ -28,10 +38,9 @@ exports.store = async (req, res) => {
       data: addCar,
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ message: error.message });
   }
 };
-
 
 exports.show = async (req, res) => {
   try {
@@ -39,10 +48,10 @@ exports.show = async (req, res) => {
     if (!car) {
       res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     } else {
-        res.status(200).json({
-            message : constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
-            data : car
-        });
+      res.status(200).json({
+        message: constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
+        data: car
+      });
     }
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -51,24 +60,39 @@ exports.show = async (req, res) => {
 
 exports.update = async (req, res) => {
   const { id } = req.params;
-  
-  try {
-    const updatedCar = await Cars.findByIdAndUpdate(id.trim(), req.body, {
-      new: true,
-    });
 
-    if (!updatedCar) {
+  try {
+    // Find the existing car by ID
+    const existingCar = await Cars.findById(id);
+
+    if (!existingCar) {
       return res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     }
 
+    // Check if the updated carName conflicts with existing cars (excluding the current car)
+    const { carName } = req.body;
+    if (carName !== existingCar.carName) {
+      const carWithSameName = await Cars.findOne({ carName });
+      if (carWithSameName && carWithSameName._id.toString() !== id) {
+        return res.status(400).json({
+          message: 'Car with the same car name already exists.',
+        });
+      }
+    }
+
+    // Update the car with the request body
+    existingCar.set(req.body);
+    const updatedCar = await existingCar.save();
+
     res.status(200).json({
-        message : constant.MSG_FOR_CAR_DATA_UPDATE_SUCCEESFULL,
-        data : updatedCar
+      message: constant.MSG_FOR_CAR_DATA_UPDATE_SUCCEESFULL,
+      data: updatedCar,
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 exports.delete = async (req, res) => {
   const { id } = req.params;
@@ -83,9 +107,10 @@ exports.delete = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 exports.carNames = async (req, res) => {
   try {
-    const cars = await Car.find({}, 'carName'); 
+    const cars = await Car.find({}, 'carName');
     const carNames = cars.map((car) => car.carName);
     res.status(200).json({
       status: true,
@@ -99,7 +124,7 @@ exports.carNames = async (req, res) => {
 
 exports.numberPlates = async (req, res) => {
   try {
-    const cars = await Car.find({}, 'numberPlate'); 
+    const cars = await Car.find({}, 'numberPlate');
     const numberPlates = cars.map((car) => car.numberPlate);
     res.status(200).json({
       status: true,

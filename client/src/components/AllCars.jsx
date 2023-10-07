@@ -4,6 +4,8 @@ import Navbar from './Navbar';
 import { carimage, deletebtn, edit, carsearch, nodata, addcarcolored } from '../assets';
 import { Link, useNavigate } from 'react-router-dom';
 import iziToast from 'izitoast';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'izitoast/dist/css/iziToast.min.css';
 
 const AllCars = () => {
@@ -15,11 +17,16 @@ const AllCars = () => {
   const [editCarId, setEditCarId] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
+
+  const fetchData = () => {
     fetch(`${window.react_app_url}car`)
       .then((response) => response.json())
       .then((data) => setCars(data.data))
       .catch((error) => console.error('Error fetching data:', error));
+  }
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const handleCarNameChange = (e) => {
@@ -50,7 +57,7 @@ const AllCars = () => {
       title: 'Confirmation',
       message: 'Are you sure you want to delete this user?',
       position: 'center',
-      color: 'red',
+      color: 'cyan',
       buttons: [
         [
           '<button><b>Yes</b></button>',
@@ -91,7 +98,6 @@ const AllCars = () => {
 
   const handleUpdateCar = async (e) => {
     e.preventDefault();
-
     try {
       const response = await fetch(`${window.react_app_url}car/${editCarId}`, {
         method: 'PUT',
@@ -102,7 +108,6 @@ const AllCars = () => {
       });
 
       if (response.ok) {
-        // Update the car in the local state
         setCars((prevCars) =>
           prevCars.map((car) =>
             car._id === editCarId
@@ -111,9 +116,10 @@ const AllCars = () => {
           )
         );
 
-        setShowModal(false);
         setCarName('');
         setNumberPlate('');
+        setShowModal(false);
+
       } else {
         console.error('Failed to update car:', response.statusText);
       }
