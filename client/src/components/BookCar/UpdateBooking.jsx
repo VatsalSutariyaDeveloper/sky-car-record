@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import "../../index.css";
+import '../../index.css';
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
@@ -10,13 +10,14 @@ import useLoader from '../Hooks/useLoader';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
 
-const UpdateBooking = ({ match }) => {
+const UpdateBooking = () => {
+  const currentDate = new Date().toISOString().split('T')[0];
   const { id } = useParams();
   const navigate = useNavigate();
   const { loading, startLoading, stopLoading, Loader } = useLoader();
   const [carNameOptions, setCarNameOptions] = useState([]);
   const [selectedCar, setSelectedCar] = useState(null);
-  const [minDate,setMinDate] = useState(currentDate);
+  const [minDate, setMinDate] = useState(currentDate);
 
   const [formData, setFormData] = useState({
     clientName: '',
@@ -28,12 +29,6 @@ const UpdateBooking = ({ match }) => {
     bookingDate: '',
     returnDate: '',
   });
-  useEffect(() => {
-    fetch(`${window.react_app_url}car-booking/${id}`)
-      .then((response) => response.json())
-      .then((data) => setFormData(data.data))
-      .catch((error) => console.error('Error fetching data:', error));
-  }, [id]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +43,6 @@ const UpdateBooking = ({ match }) => {
         }));
         setCarNameOptions(options);
       } catch (error) {
-        console.error('Error fetching carName options:', error);
         toast.error('Failed to fetch carName options. Please try again later.', {
           position: 'top-right',
           autoClose: 5000,
@@ -65,10 +59,70 @@ const UpdateBooking = ({ match }) => {
     fetchData();
   }, []);
 
-  const handleCarSelectChange = (selectedOption) => {
+  useEffect(() => {
+    if (selectedCar) {
+      axios
+        .get(`http://localhost:3000/car/number-plate/${selectedCar.value}`)
+        .then((response) => {
+          if (response.data && response.data.data) {
+            setFormData((prevData) => ({
+              ...prevData,
+              numberPlate: response.data.data,
+            }));
+          } else {
+            console.error('No number plate found for selected carName.');
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching number plate:', error);
+        });
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        numberPlate: '',
+      }));
+    }
+  }, [selectedCar]); // Only depend on selectedCar
+
+  useEffect(() => {
+    const fetchBookingData = async () => {
+      try {
+        const response = await fetch(`${window.react_app_url}car-booking/${id}`);
+        if (!response.ok) {
+          throw new Error('Error fetching data');
+        }
+        const data = await response.json();
+        setFormData(data.data);
+        const carNameOption = carNameOptions.find((option) => option.value === data.data.carName);
+        if (carNameOption) {
+          setSelectedCar(carNameOption);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        toast.error('Failed to fetch booking data. Please try again later.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+      }
+    };
+
+    fetchBookingData();
+  }, [id, carNameOptions]);
+
+  const handleCarSelectChange = (selectedOption, name) => {
     setSelectedCar(selectedOption);
+    setFormData({
+      ...formData,
+      [name.name]: selectedOption.value,
+    });
   };
-  
+
   const handleChange = (name, value) => {
     setFormData({
       ...formData,
@@ -88,7 +142,7 @@ const UpdateBooking = ({ match }) => {
 
     if (missingFields.length > 0) {
       stopLoading();
-      toast.warning('Please Enter Fill all Data', {
+      toast.warning('Please fill in all required fields.', {
         position: 'top-right',
         autoClose: 5000,
         hideProgressBar: true,
@@ -99,11 +153,38 @@ const UpdateBooking = ({ match }) => {
         theme: 'dark',
       });
       return;
-    } else {
-      try {
-        const response = await axios.put(`${window.react_app_url}car-booking/${id}`, formData); // Replace with your actual API endpoint
-        stopLoading();
-        toast.success(response.data.message, {
+    }
+
+    try {
+      const response = await axios.put(`${window.react_app_url}car-booking/${id}`, formData);
+      stopLoading();
+      toast.success(response.data.message, {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
+
+      setFormData({
+        clientName: '',
+        dealerName: '',
+        carName: '',
+        numberPlate: '',
+        price: '',
+        destination: '',
+        bookingDate: '',
+        returnDate: '',
+      });
+      
+      navigate('/');
+    } catch (error) {
+      stopLoading();
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message, {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: true,
@@ -113,55 +194,25 @@ const UpdateBooking = ({ match }) => {
           progress: undefined,
           theme: 'dark',
         });
-
-        setFormData({
-          clientName: '',
-          dealerName: '',
-          carName: '',
-          numberPlate: '',
-          price: '',
-          destination: '',
-          bookingDate: '',
-          returnDate: '',
+      } else {
+        toast.error('An error occurred while processing your request.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
         });
-        startLoading();
-        setTimeout(() => {
-          stopLoading();
-          navigate('/');
-        }, 1000);
-      } catch (error) {
-        stopLoading();
-        if (error.response && error.response.data) {
-          toast.error(error.response.data.message, {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-          });
-        } else {
-          toast.error('An error occurred while processing your request.', {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-          });
-        }
-        console.error('Error:', error);
       }
+      console.error('Error:', error);
     }
   };
 
   return (
     <>
-     <ToastContainer />
+      <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <div className='p-3 md:p-6 flex'>
@@ -178,18 +229,21 @@ const UpdateBooking = ({ match }) => {
             <div className="md:grid md:grid-cols-2 md:gap-2">
               <CustomTextField type="text" label="Client Name" name="clientName" value={formData.clientName} onChange={handleChange} />
               <CustomTextField type="text" label="Dealer Name" name="dealerName" value={formData.dealerName} onChange={handleChange} />
-              <Select
-                options={carNameOptions}
-                value={selectedCar}
-                onChange={handleCarSelectChange}
-                placeholder="Select Car Name"
-                isSearchable
-              />
-              <CustomTextField type="selectbox" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
+              <div className="md:relative">
+                <label className="md:text-md text-sm mb-1 md:mb-2 block text-white">Car Name</label>
+                <Select
+                  options={carNameOptions}
+                  value={selectedCar}
+                  onChange={(selectedOption) => handleCarSelectChange(selectedOption, { name: 'carName' })}
+                  placeholder="Select Car Name"
+                  isSearchable
+                />
+              </div>
+              <CustomTextField type="selectbox" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} readonly='true' />
               <CustomTextField type="number" label="Price" name="price" value={formData.price} onChange={handleChange} />
               <CustomTextField type="text" label="Destination" name="destination" value={formData.destination} onChange={handleChange} />
-              <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} />
-              <CustomTextField type="date" label="Return Date" name="returnDate" value={formData.returnDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} />
+              <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} minDate={currentDate} />
+              <CustomTextField type="date" label="Return Date" name="returnDate" value={formData.returnDate} onChange={handleChange} minDate={minDate} />
             </div>
             <div className='flex justify-center'>
               <div className='px-1'>
@@ -205,6 +259,7 @@ const UpdateBooking = ({ match }) => {
         </form>
       </section>
     </>
-  )
-}
+  );
+};
+
 export default UpdateBooking;

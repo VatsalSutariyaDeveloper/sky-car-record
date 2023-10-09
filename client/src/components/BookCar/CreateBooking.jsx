@@ -91,8 +91,12 @@ const CreateBooking = () => {
   }, [selectedCar]); // Only depend on selectedCar
 
 
-  const handleCarSelectChange = (selectedOption) => {
+  const handleCarSelectChange = (selectedOption, name) => {
     setSelectedCar(selectedOption);
+    setFormData({
+      ...formData,
+      [name.name]: selectedOption.value,
+    });
   };
 
   const handleChange = (name, value) => {
@@ -246,7 +250,7 @@ const CreateBooking = () => {
                   isSearchable
                 />
               </div>
-              <CustomTextField type='text' label='Number Plate' name='numberPlate' value={formData.numberPlate} onChange={handleChange} />
+              <CustomTextField type='text' label='Number Plate' name='numberPlate' value={formData.numberPlate} onChange={handleChange} readonly='true' />
               <CustomTextField type='number' label='Price' name='price' value={formData.price} onChange={handleChange} />
               <CustomTextField type='text' label='Destination' name='destination' value={formData.destination} onChange={handleChange} />
               <CustomTextField type='date' label='Booking Date' name='bookingDate' value={formData.bookingDate} onChange={handleChange} minDate={currentDate} />

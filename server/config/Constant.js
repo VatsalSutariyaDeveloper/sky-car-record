@@ -16,7 +16,9 @@ module.exports = Object.freeze({
     MSG_FOR_GET_CAR_NAMES_SUCCESSFULLY: "Cars Name Get Successfully",
     MSG_FOR_GET_NUMBER_PLATES_SUCCESSFULLY: "Number Plates Get Successfully",
     MSG_FOR_CAR_NOT_FOUND_AND_NUMBER_PLATE_NOT_EXIST: "Car not found or has no number plate",
-    
+    MSG_FOR_CAR_ADD_SUCCEESFULL: "Car Add Successfully",
+    MSG_FOR_CAR_ALREADY_EXIST: "Car already exists.",
+
     // IMAGE CONSTANT
     MSG_FOR_UNSUPPORTED_FILE: "Unsupported file type",
     IMAGE_STORE_PATH: "./uploads/images",

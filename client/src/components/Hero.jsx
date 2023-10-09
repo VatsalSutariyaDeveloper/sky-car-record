@@ -84,7 +84,7 @@ const Hero = () => {
       id: 'question',
       zindex: 999,
       title: 'Confirmation',
-      message: 'Are you sure you want to delete this user?',
+      message: 'Are you sure you want to delete this booking?',
       position: 'center',
       color: 'cyan',
       buttons: [
@@ -246,7 +246,10 @@ const Hero = () => {
                             </tr>
                             <tr>
                               <td className="px-6 py-4 border-b border-gray-300">Number Plate</td>
-                              <td className="px-6 py-4 border-b border-gray-300">{booking.numberPlate}</td>
+                              <td className="px-6 py-4 border-b border-gray-300">
+                              {booking.numberPlate.split('').map((char, index) => (
+                                  index > 0 && index % 10 === 0 ? <br key={index} /> : char
+                                ))}</td>
                             </tr>
                             <tr>
                               <td className="px-6 py-4 border-b border-gray-300">Destination</td>

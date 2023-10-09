@@ -24,7 +24,7 @@ exports.store = async (req, res) => {
 
     if (existingCar) {
       return res.status(400).json({
-        message: 'Car name or Number plate already exists.',
+        message: constant.MSG_FOR_CAR_ALREADY_EXIST,
       });
     }
 
@@ -34,7 +34,7 @@ exports.store = async (req, res) => {
     });
 
     res.status(201).json({
-      message: constant.MSG_FOR_BOOKING_SUCCEESFULL,
+      message: constant.MSG_FOR_CAR_ADD_SUCCEESFULL,
       data: addCar,
     });
   } catch (error) {

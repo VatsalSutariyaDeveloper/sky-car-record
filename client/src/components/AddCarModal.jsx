@@ -12,16 +12,16 @@ const AddCarModal = () => {
     const [numberPlate, setNumberPlate] = useState('');
     const navigate = useNavigate();
 
-    const fetchData = () => {
-        fetch(`${window.react_app_url}car`)
-            .then((response) => response.json())
-            .then((data) => setCarName(data.data))
-            .catch((error) => console.error('Error fetching data:', error));
-    }
+    // const fetchData = () => {
+    //     fetch(`${window.react_app_url}car`)
+    //         .then((response) => response.json())
+    //         .then((data) => console.log(data.data))
+    //         .catch((error) => console.error('Error fetching data:', error));
+    // }
 
-    useEffect(() => {
-        fetchData();
-    }, []);
+    // useEffect(() => {
+    //     fetchData();
+    // }, []);
 
     const handleCarNameChange = (e) => {
         setCarName(e.target.value);
@@ -47,7 +47,7 @@ const AddCarModal = () => {
                 progress: undefined,
                 theme: 'dark',
             });
-            fetchData();
+            // fetchData();
             resetForm();
             navigate('/all-cars');
         } catch (error) {
