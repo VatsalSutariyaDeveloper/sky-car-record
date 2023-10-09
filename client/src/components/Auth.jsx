@@ -22,7 +22,16 @@ const Auth = ({ element }) => {
                         navigate('/login');
                     }
                 } catch (error) {
-                    console.error('Authentication error:', error);
+                    toast.error('Authentication error', {
+                        position: 'top-right',
+                        autoClose: 5000,
+                        hideProgressBar: true,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                        theme: 'dark',
+                      });
                     removeCookie('jwt')
                     navigate('/login');
                 }

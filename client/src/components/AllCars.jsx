@@ -29,7 +29,16 @@ const AllCars = () => {
         stopAnimatedLoading();
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        toast.error('An error occurred while processing your request.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
         stopAnimatedLoading();
       });
   }
@@ -94,8 +103,16 @@ const AllCars = () => {
 
       setCars((prevCars) => prevCars.filter((car) => car._id !== id));
     } catch (error) {
-      console.error('Error deleting car:', error);
-    }
+      toast.error('An error occurred while processing your request.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });    }
   };
 
   const openEditModal = (id, carName, numberPlate) => {
@@ -130,10 +147,28 @@ const AllCars = () => {
         setShowModal(false);
 
       } else {
-        console.error('Failed to update car:', response.statusText);
+        toast.error('Failed to update car', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
       }
     } catch (error) {
-      console.error('Error updating car:', error);
+      toast.error('Error updating car', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
     }
   };
 
@@ -185,7 +220,9 @@ const AllCars = () => {
                           <tr>
                             <td className="px-6 py-4 flex">
                               <img src={carimage} alt="car image" />
-                              <span className='font-bold text-lg mx-3 mt-[2px]'>{car.carName}</span>
+                              <span className='font-bold text-lg mx-3 mt-[2px]'>{car.carName.split('').map((char, index) => (
+                              index > 0 && index % 10 === 0 ? <br key={index} /> : char
+                            ))}</span>
                             </td>
                             <td>
                               <div className='flex justify-end mr-2'>
@@ -209,8 +246,8 @@ const AllCars = () => {
                           <tr>
                             <td className="px-6 py-4">Number Plate</td>
                             <td className="px-6 py-4"> {car.numberPlate.split('').map((char, index) => (
-                                  index > 0 && index % 10 === 0 ? <br key={index} /> : char
-                                ))}</td> 
+                              index > 0 && index % 10 === 0 ? <br key={index} /> : char
+                            ))}</td>
                           </tr>
                         </tbody>
                       </table>

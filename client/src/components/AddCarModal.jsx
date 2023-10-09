@@ -5,23 +5,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import useAnimatedLoader from './Hooks/useAnimatedLoader';
 
 const AddCarModal = () => {
     const [showModal, setShowModal] = useState(false);
     const [carName, setCarName] = useState('');
     const [numberPlate, setNumberPlate] = useState('');
     const navigate = useNavigate();
-
-    // const fetchData = () => {
-    //     fetch(`${window.react_app_url}car`)
-    //         .then((response) => response.json())
-    //         .then((data) => console.log(data.data))
-    //         .catch((error) => console.error('Error fetching data:', error));
-    // }
-
-    // useEffect(() => {
-    //     fetchData();
-    // }, []);
 
     const handleCarNameChange = (e) => {
         setCarName(e.target.value);
@@ -32,24 +22,50 @@ const AddCarModal = () => {
         setNumberPlate(value);
     };
 
+    const handleNumberKeyPress = (e) => {
+        const charCode = e.which ? e.which : e.keyCode;
+        const inputValue = e.key;
+
+        if ((charCode >= 48 && charCode <= 57) || (charCode >= 65 && charCode <= 90) || (charCode >= 97 && charCode <= 122)) {
+            if (inputValue.length >= 10) {
+                e.preventDefault();
+            }
+        } else {
+            e.preventDefault();
+        }
+    };
+
+
     const handleAddCar = async (e) => {
         e.preventDefault();
 
         try {
             const response = await axios.post(`${window.react_app_url}car`, { carName, numberPlate });
-            toast.success(response.data.message, {
-                position: 'top-right',
-                autoClose: 5000,
-                hideProgressBar: true,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'dark',
-            });
-            // fetchData();
-            resetForm();
-            navigate('/all-cars');
+            if (response.data.status) {
+                toast.success(response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });
+                navigate('/all-cars');
+                resetForm();
+            } else {
+                toast.error(response.data.message, {
+                    position: 'top-right',
+                    autoClose: 5000,
+                    hideProgressBar: true,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: 'dark',
+                });
+            }
         } catch (error) {
             if (error.response && error.response.data) {
                 toast.error(error.response.data.message, {
@@ -119,6 +135,7 @@ const AddCarModal = () => {
                                             placeholder="Number plate"
                                             value={numberPlate}
                                             onChange={handleNumberPlateChange}
+                                            onKeyPress={handleNumberKeyPress}
                                         />
                                     </div>
                                     {/*footer*/}

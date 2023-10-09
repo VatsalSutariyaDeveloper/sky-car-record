@@ -70,11 +70,29 @@ const UpdateBooking = () => {
               numberPlate: response.data.data,
             }));
           } else {
-            console.error('No number plate found for selected carName.');
+            toast.error('No number plate found for selected car-name', {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'dark',
+            });
           }
         })
         .catch((error) => {
-          console.error('Error fetching number plate:', error);
+          toast.error('Error fetching number plate', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
         });
     } else {
       setFormData((prevData) => ({
@@ -82,14 +100,15 @@ const UpdateBooking = () => {
         numberPlate: '',
       }));
     }
-  }, [selectedCar]); // Only depend on selectedCar
+  }, [selectedCar]); 
 
   useEffect(() => {
     const fetchBookingData = async () => {
       try {
         const response = await fetch(`${window.react_app_url}car-booking/${id}`);
-        if (!response.ok) {
-          throw new Error('Error fetching data');
+        if (response.status !== 201) {
+          navigate('/');
+          return;
         }
         const data = await response.json();
         setFormData(data.data);
@@ -98,8 +117,7 @@ const UpdateBooking = () => {
           setSelectedCar(carNameOption);
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
-        toast.error('Failed to fetch booking data. Please try again later.', {
+        toast.error('Error fetching data', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: true,
@@ -115,6 +133,7 @@ const UpdateBooking = () => {
     fetchBookingData();
   }, [id, carNameOptions]);
 
+
   const handleCarSelectChange = (selectedOption, name) => {
     setSelectedCar(selectedOption);
     setFormData({
@@ -128,7 +147,7 @@ const UpdateBooking = () => {
       ...formData,
       [name]: value,
     });
-    if(name == 'bookingDate'){
+    if (name == 'bookingDate') {
       setMinDate(value);
     }
   };
@@ -138,7 +157,7 @@ const UpdateBooking = () => {
     startLoading();
     const requiredFields = ['clientName', 'dealerName', 'carName', 'numberPlate', 'price', 'destination', 'bookingDate', 'returnDate'];
 
-    const missingFields = requiredFields.filter((fieldName) => !formData[fieldName]);
+    const missingFields = requiredFields.filter((fieldName) => !formData[fieldName].trim());
 
     if (missingFields.length > 0) {
       stopLoading();
@@ -179,7 +198,7 @@ const UpdateBooking = () => {
         bookingDate: '',
         returnDate: '',
       });
-      
+
       navigate('/');
     } catch (error) {
       stopLoading();
@@ -206,7 +225,16 @@ const UpdateBooking = () => {
           theme: 'dark',
         });
       }
-      console.error('Error:', error);
+      toast.error('Error from server side', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
     }
   };
 

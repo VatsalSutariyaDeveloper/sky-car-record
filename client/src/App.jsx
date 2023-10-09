@@ -27,7 +27,7 @@ const App = () => {
         <Route path="update-booking/:id" element={<Auth element={<UpdateBooking />} />} />
         <Route path="add-booking" element={<Auth element={<CreateBooking />} />} />
         <Route path="all-cars" element={<Auth element={<AllCars />} />} />
-        <Route path="*" element={<Error404 />} />
+        <Route path="*" element={<Auth element={<Error404 />} />} />
       </Routes>
     </>
   );

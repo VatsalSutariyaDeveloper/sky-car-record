@@ -14,8 +14,8 @@ const Hero = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [filteredBookings, setFilteredBookings] = useState([]);
-  const [visibleItems, setVisibleItems] = useState(4);
-  const [itemsToLoad, setItemsToLoad] = useState(4);
+  const [visibleItems, setVisibleItems] = useState(12);
+  const [itemsToLoad, setItemsToLoad] = useState(12);
   const { loading, startAnimatedLoading , stopAnimatedLoading, Loader } = useAnimatedLoader();
   const navigate = useNavigate();
 
@@ -30,7 +30,16 @@ const Hero = () => {
         stopAnimatedLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        toast.error('Error fetching data', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
         stopAnimatedLoading(false);
       });
   };
@@ -113,7 +122,16 @@ const Hero = () => {
       });
       fetchData();
     } catch (error) {
-      console.error('Error deleting booking:', error);
+      toast.error('Error in deleting booking.', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
     }
   };
 

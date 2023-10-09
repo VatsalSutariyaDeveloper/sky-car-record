@@ -39,6 +39,21 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         startLoading();
+        if (!formData.userName.trim() || !formData.password.trim()) {
+            toast.warning('Please fill all fields.', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+            });
+            stopLoading();
+            return;
+        }
+
         try {
             const response = await axios.post(`${window.react_app_url}auth/login`, formData, { withCredentials: true });
             if (!response.data.status) {

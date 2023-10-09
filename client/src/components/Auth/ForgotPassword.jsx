@@ -27,6 +27,20 @@ const ForgotPassword = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         startLoading();
+        if (!userName.trim() || !password.trim() || !confirmPassword.trim()) {
+            toast.warning('Please fill in all required fields.', {
+                position: 'top-right',
+                autoClose: 5000,
+                hideProgressBar: true,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'dark',
+            });
+            stopLoading();
+            return;
+        }
         try {
             if (password === confirmPassword) {
                 const response = await axios.post(`${window.react_app_url}auth/reset-password`, { 'password': password, 'userName': userName });

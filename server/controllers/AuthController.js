@@ -24,8 +24,8 @@ exports.login = async (req, res) => {
         return res.json({ status:false, message: constant.MSG_FOR_WRONG_PASSWORD });
       }
   
-      const maxAge = rememberMe == false ? 50 * 365 * 24 * 60 * 60 : 5 * 24 * 60 * 60;
-
+      const maxAge = rememberMe == false ? 5 * 24 * 60 * 60 : 50 * 365 * 24 * 60 * 60;
+      
       const token = creatToken(user._id, maxAge)
       res.cookie("jwt", token, {
         withCrdentials:true,

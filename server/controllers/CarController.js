@@ -3,7 +3,7 @@ const constant = require('../config/Constant');
 
 exports.index = async (req, res) => {
   try {
-    const car = await Cars.find();
+    const car = await Cars.find().sort({ createdAt: -1 });
     res.status(200).json({
       status: true,
       message: constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
@@ -18,12 +18,19 @@ exports.store = async (req, res) => {
   const { carName, numberPlate } = req.body;
 
   try {
+    const lowerCaseCarName = carName.toLowerCase();
+    const lowerCaseNumberPlate = numberPlate.toLowerCase();
+
     const existingCar = await Cars.findOne({
-      $or: [{ carName }, { numberPlate }],
+      $or: [
+        { carName: { $regex: new RegExp(`^${lowerCaseCarName}$`, 'i') } },
+        { numberPlate: { $regex: new RegExp(`^${lowerCaseNumberPlate}$`, 'i') } },
+      ],
     });
 
     if (existingCar) {
-      return res.status(400).json({
+      return res.json({
+        status: false,
         message: constant.MSG_FOR_CAR_ALREADY_EXIST,
       });
     }
@@ -36,9 +43,10 @@ exports.store = async (req, res) => {
     res.status(201).json({
       message: constant.MSG_FOR_CAR_ADD_SUCCEESFULL,
       data: addCar,
+      status:true
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ message: error.message,status:false });
   }
 };
 

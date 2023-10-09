@@ -44,8 +44,7 @@ const CreateBooking = () => {
         }));
         setCarNameOptions(options);
       } catch (error) {
-        console.error('Error fetching carName options:', error);
-        toast.error('Failed to fetch carName options. Please try again later.', {
+        toast.error('Failed to fetch car name options. Please try again later.', {
           position: 'top-right',
           autoClose: 5000,
           hideProgressBar: true,
@@ -73,13 +72,29 @@ const CreateBooking = () => {
               numberPlate: response.data.data,
             }));
           } else {
-            console.error('No number plate found for selected carName.');
-            // You can add an error message or notification here if needed
+            toast.error('No number plate found for selected car name.', {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'dark',
+            });
           }
         })
         .catch((error) => {
-          console.error('Error fetching number plate:', error);
-          // You can add an error message or notification here if needed
+          toast.error('Error fetching number plate', {
+            position: 'top-right',
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: 'dark',
+          });
         });
     } else {
       // Clear the numberPlate field if no carName is selected
@@ -100,6 +115,7 @@ const CreateBooking = () => {
   };
 
   const handleChange = (name, value) => {
+    
     setFormData({
       ...formData,
       [name]: value,
@@ -120,8 +136,7 @@ const CreateBooking = () => {
 
     const requiredFields = ['clientName', 'dealerName', 'carName', 'numberPlate', 'price', 'destination', 'bookingDate', 'returnDate'];
 
-    const missingFields = requiredFields.filter((fieldName) => !formData[fieldName]);
-  console.log(missingFields)
+    const missingFields = requiredFields.filter((fieldName) => !formData[fieldName].trim());
     if (missingFields.length > 0) {
       stopLoading();
       toast.warning('Please fill in all required fields.', {
@@ -215,7 +230,6 @@ const CreateBooking = () => {
           theme: 'dark',
         });
       }
-      console.error('Error:', error);
     }
   };
 

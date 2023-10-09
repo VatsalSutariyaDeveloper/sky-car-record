@@ -15,7 +15,6 @@ const Navbar = () => {
   const [cookies, setCookie, removeCookie] = useCookies([]);
   const { loading, startLoading, stopLoading, Loader } = useLoader();
 
-
   const logout = () => {
     startLoading();
     iziToast.question({
