@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar'
 import styles from '../style';
 import { date, deletebtn, edit, carsearch, datesearch, nodata, reset, arrowup } from '../assets';
 import '../index.css';
@@ -7,30 +6,32 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import useAnimatedLoader from "./Hooks/useAnimatedLoader"
 
 const Hero = () => {
   const [bookings, setBookings] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [showBackToTop, setShowBackToTop] = useState(false);
-  const [loading, setLoading] = useState(true);
   const [filteredBookings, setFilteredBookings] = useState([]);
   const [visibleItems, setVisibleItems] = useState(4);
   const [itemsToLoad, setItemsToLoad] = useState(4);
+  const { loading, startAnimatedLoading , stopAnimatedLoading, Loader } = useAnimatedLoader();
   const navigate = useNavigate();
 
+
   const fetchData = () => {
-    setLoading(true);
+    startAnimatedLoading(true);
     fetch(`${window.react_app_url}car-booking`)
       .then((response) => response.json())
       .then((data) => {
         setBookings(data.data);
         setFilteredBookings(data.data);
-        setLoading(false);
+        stopAnimatedLoading(false);
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
-        setLoading(false);
+        stopAnimatedLoading(false);
       });
   };
 
@@ -145,72 +146,8 @@ const Hero = () => {
     setVisibleItems(visibleItems + itemsToLoad);
   };
 
-  const LoadingAnimation = () => (
-    <div className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]">
-      <table className="text-gradient table-fixed animate-pulse">
-        <tbody>
-          <tr>
-            <td className="px-6 py-4 flex">
-              <div className="rounded-full bg-slate-700 h-10 w-10"></div>
-              <span className='font-bold text-lg mx-3 mt-[2px]'></span>
-            </td>
-            <td>
-              <div className='flex justify-end mr-2'>
-                <div className="mr-4 rounded-full bg-slate-700 h-10 w-10"></div>
-                <div className="rounded-full bg-slate-700 h-10 w-10"></div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
-            <td className="px-6 py-4 border-b border-gray-300 w-[100px]">
-              <div className="w-full h-6 bg-slate-700 rounded"></div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
-            <td className="px-6 py-4 border-b border-gray-300">
-              <div className="w-full h-6 bg-slate-700 rounded"></div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
-            <td className="px-6 py-4 border-b border-gray-300">
-              <div className="w-full h-6 bg-slate-700 rounded"></div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
-            <td className="px-6 py-4 border-b border-gray-300">
-              <div className="w-full h-6 bg-slate-700 rounded"></div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
-            <td className="px-6 py-4 border-b border-gray-300">
-              <div className="w-full h-6 bg-slate-700 rounded"></div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
-            <td className="px-6 py-4 border-b border-gray-300">
-              <div className="w-full h-6 bg-slate-700 rounded"></div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-6 py-4"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
-            <td className="px-6 py-4">
-              <div className="w-full h-6 bg-slate-700 rounded"></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-
   return (
     <>
-      <Navbar />
       <div className={`bg-primary`}>
         <section
           id="home"
@@ -246,7 +183,7 @@ const Hero = () => {
             {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {Array.from({ length: 4 }).map((_, index) => (
-                  <LoadingAnimation key={index} />
+                  <Loader key={index} />
                 ))}
               </div>
             ) : (

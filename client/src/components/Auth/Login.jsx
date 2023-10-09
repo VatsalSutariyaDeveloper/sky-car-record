@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { openeye, closeeye, loginimage } from '../../assets';
+import useLoader from "../Hooks/useLoader"
 
 const Login = () => {
     const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const Login = () => {
         rememberMe: false,
     });
     const [showPassword, setShowPassword] = useState(false);
+    const { loading, startLoading, stopLoading, Loader } = useLoader();
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -36,6 +38,7 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        startLoading();
         try {
             const response = await axios.post(`${window.react_app_url}auth/login`, formData, { withCredentials: true });
             if (!response.data.status) {
@@ -74,6 +77,8 @@ const Login = () => {
                 progress: undefined,
                 theme: 'dark',
             });
+        } finally {
+            stopLoading();
         }
     };
 
@@ -81,6 +86,7 @@ const Login = () => {
         <>
             <section className={`bg-primary ${styles.flexStart}`}>
                 <ToastContainer />
+                <Loader />
                 <form onSubmit={handleSubmit}>
                     <div className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
                         <div className="md:w-1/3 md:-mt-[10px] max-w-sm -mt-36 lg:-mt-0">
@@ -101,7 +107,7 @@ const Login = () => {
                             />
                             <div className="relative">
                                 <input
-                                    className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
+                                    className="text-sm w-64 md:w-96 px-4 py-2 border border-solid border-gray-300 rounded mt-4"
                                     type={showPassword ? 'text' : 'password'}
                                     placeholder="Password"
                                     name="password"
@@ -141,9 +147,9 @@ const Login = () => {
                                 </div>
                             </div>
                             <div className="text-center md:text-left">
-                                <button className={`mt-4 md:ml-[70px] md:w-60 w-[150px] px-4 py-2 font-bold uppercase rounded text-xs tracking-wider${styles.flexCenter} bg-blue-gradient`} type="submit">Login</button>
+                                <button className={`mt-4 md:ml-[100px] md:w-[200px] w-[150px] px-4 py-2 font-bold uppercase rounded text-xs tracking-wider${styles.flexCenter} bg-blue-gradient`} type="submit">Login</button>
                             </div>
-                            <div className="mt-4 md:ml-[135px] font-semibold text-sm text-slate-500 text-center md:text-left">
+                            <div className="mt-4 md:ml-[145px] font-semibold text-sm text-slate-500 text-center md:text-left">
                                 <Link to={`/forgot-password`} className="text-white hover:text-gray-200 hover:underline hover:underline-offset-4">Forgot Password?</Link>
                             </div>
                         </div>

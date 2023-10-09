@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import "../../index.css";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 const CustomTextField = ({ type, label, name, value, onChange, minDate }) => {
+
   function formatDate(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
     const day = date.getDate().toString().padStart(2, '0');
+
     return `${year}-${month}-${day}`;
   }
 
@@ -37,7 +37,7 @@ const CustomTextField = ({ type, label, name, value, onChange, minDate }) => {
               type={type}
               className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-black focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
               placeholder=" "
-              value={formatDate(value)}
+              value={formatDate(value)} 
               onChange={handleInputChange}
               min={minDate}
             />
@@ -46,7 +46,7 @@ const CustomTextField = ({ type, label, name, value, onChange, minDate }) => {
               type={type}
               className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 focus:border-2 focus:border-black focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
               placeholder=" "
-              value={value}
+              value={value} 
               onChange={handleInputChange}
               min={minDate}
               onKeyPress={type === 'number' ? handleNumberKeyPress : null} // Use conditional operator
@@ -56,7 +56,7 @@ const CustomTextField = ({ type, label, name, value, onChange, minDate }) => {
             {label}
           </label>
         </div>
-      </div>
+      </div>  
     </div>
   );
 };

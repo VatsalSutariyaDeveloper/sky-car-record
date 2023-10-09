@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import styles from '../../style';
 import { ToastContainer, toast } from 'react-toastify';
-import { openeye, closeeye ,forgotpass} from '../../assets';
+import { openeye, closeeye, forgotpass } from '../../assets';
 import axios from 'axios';
+import useLoader from "../Hooks/useLoader"
 
 const ForgotPassword = () => {
     const [userName, setUserName] = useState('');
@@ -11,6 +12,7 @@ const ForgotPassword = () => {
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const { loading, startLoading, stopLoading, Loader } = useLoader();
 
     const navigate = useNavigate();
 
@@ -24,12 +26,13 @@ const ForgotPassword = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        startLoading();
         try {
             if (password === confirmPassword) {
-                const response = await axios.post(`${window.react_app_url}auth/reset-password`, {'password':password,'userName':userName});
-                if(!response.data.status){
+                const response = await axios.post(`${window.react_app_url}auth/reset-password`, { 'password': password, 'userName': userName });
+                if (!response.data.status) {
                     toast.error(response.data.message, {
-                        position: 'top-right',  
+                        position: 'top-right',
                         autoClose: 5000,
                         hideProgressBar: true,
                         closeOnClick: true,
@@ -37,9 +40,9 @@ const ForgotPassword = () => {
                         draggable: true,
                         progress: undefined,
                         theme: 'dark',
-                    }); 
+                    });
                 }
-                else{
+                else {
                     toast.success(response.data.message, {
                         position: 'top-right',
                         autoClose: 5000,
@@ -63,7 +66,7 @@ const ForgotPassword = () => {
                     draggable: true,
                     progress: undefined,
                     theme: 'dark',
-                });   
+                });
             }
         }
         catch (error) {
@@ -77,12 +80,15 @@ const ForgotPassword = () => {
                 progress: undefined,
                 theme: 'dark',
             });
+        } finally {
+            stopLoading();
         }
     };
 
     return (
         <>
             <section className={`bg-primary`}>
+                <Loader />
                 <form onSubmit={handleSubmit}>
                     <div className="h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
                         <div className="md:w-1/3 md:-mt-[10px] max-w-sm -mt-36 lg:-mt-0">

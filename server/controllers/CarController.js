@@ -1,6 +1,5 @@
 const Cars = require('../schema/CarSchama');
 const constant = require('../config/Constant');
-const CarSchama = require('../schema/CarSchama');
 
 exports.index = async (req, res) => {
   try {
@@ -110,7 +109,7 @@ exports.delete = async (req, res) => {
 
 exports.carNames = async (req, res) => {
   try {
-    const cars = await Car.find({}, 'carName');
+    const cars = await Cars.find({}, 'carName');
     const carNames = cars.map((car) => car.carName);
     res.status(200).json({
       status: true,
@@ -124,15 +123,26 @@ exports.carNames = async (req, res) => {
 
 exports.numberPlates = async (req, res) => {
   try {
-    const cars = await Car.find({}, 'numberPlate');
-    const numberPlates = cars.map((car) => car.numberPlate);
-    res.status(200).json({
-      status: true,
-      message: constant.MSG_FOR_GET_NUMBER_PLATES_SUCCESSFULLY,
-      data: numberPlates,
-    });
+    const { carName } = req.params;
+
+    const car = await Cars.findOne({ carName }, 'numberPlate');
+
+    if (car) {
+      res.status(200).json({
+        status: true,
+        message: constant.MSG_FOR_GET_NUMBER_PLATES_SUCCESSFULLY,
+        data: car.numberPlate,
+      });
+    } else {
+      // Handle the case where the car with the specified name is not found
+      res.status(404).json({
+        status: false,
+        message: constant.MSG_FOR_CAR_NOT_FOUND_AND_NUMBER_PLATE_NOT_EXIST,
+      });
+    }
   } catch (error) {
-    resizeTo.json({ status: false, message: error.message });
+    res.status(500).json({ status: false, message: error.message });
   }
 };
+
 

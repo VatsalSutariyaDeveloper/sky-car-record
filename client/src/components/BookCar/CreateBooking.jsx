@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Navbar from "../Navbar"
 import '../../index.css';
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
@@ -9,10 +8,12 @@ import { useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLoader from '../Hooks/useLoader';
+import Select from 'react-select';
 
 const CreateBooking = () => {
   const currentDate = new Date().toISOString().split('T')[0];
   const navigate = useNavigate();
+  const [minDate, setMinDate] = useState(currentDate);
 
   const initialFormData = {
     clientName: '',
@@ -22,11 +23,77 @@ const CreateBooking = () => {
     price: '',
     destination: '',
     bookingDate: currentDate,
-    returnDate: '', 
+    returnDate: '',
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const [carNameOptions, setCarNameOptions] = useState([]);
+  const [selectedCar, setSelectedCar] = useState(null);
   const { loading, startLoading, stopLoading, Loader } = useLoader();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/car/car-name');
+        if (!response.data || !Array.isArray(response.data.data)) {
+          throw new Error('No carName options found.');
+        }
+        const options = response.data.data.map((carName) => ({
+          value: carName,
+          label: carName,
+        }));
+        setCarNameOptions(options);
+      } catch (error) {
+        console.error('Error fetching carName options:', error);
+        toast.error('Failed to fetch carName options. Please try again later.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+      }
+    };
+
+    fetchData();
+  }, []); // Provide an empty dependency array to run this effect only once
+
+  useEffect(() => {
+    // When selectedCar changes, fetch corresponding number plate
+    if (selectedCar) {
+      axios
+        .get(`http://localhost:3000/car/number-plate/${selectedCar.value}`)
+        .then((response) => {
+          if (response.data && response.data.data) {
+            setFormData((prevData) => ({
+              ...prevData,
+              numberPlate: response.data.data,
+            }));
+          } else {
+            console.error('No number plate found for selected carName.');
+            // You can add an error message or notification here if needed
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching number plate:', error);
+          // You can add an error message or notification here if needed
+        });
+    } else {
+      // Clear the numberPlate field if no carName is selected
+      setFormData((prevData) => ({
+        ...prevData,
+        numberPlate: '',
+      }));
+    }
+  }, [selectedCar]);
+
+
+  const handleCarSelectChange = (selectedOption) => {
+    setSelectedCar(selectedOption);
+  };
 
   const handleChange = (name, value) => {
     setFormData({
@@ -46,7 +113,7 @@ const CreateBooking = () => {
     const requiredFields = ['clientName', 'dealerName', 'carName', 'numberPlate', 'price', 'destination', 'bookingDate', 'returnDate'];
 
     const missingFields = requiredFields.filter((fieldName) => !formData[fieldName]);
-
+  console.log(missingFields)
     if (missingFields.length > 0) {
       stopLoading();
       toast.warning('Please fill in all required fields.', {
@@ -145,7 +212,6 @@ const CreateBooking = () => {
 
   return (
     <>
-      <Navbar />
       <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
@@ -163,12 +229,22 @@ const CreateBooking = () => {
             <div className='md:grid md:grid-cols-2 md:gap-2'>
               <CustomTextField type='text' label='Client Name' name='clientName' value={formData.clientName} onChange={handleChange} />
               <CustomTextField type='text' label='Dealer Name' name='dealerName' value={formData.dealerName} onChange={handleChange} />
-              <CustomTextField type='text' label='Car Name' name='carName' value={formData.carName} onChange={handleChange} />
+              <div className="md:relative">
+                <label className="md:text-md text-sm mb-1 md:mb-2 block text-white">Car Name</label>
+                <Select
+                  name='carName'
+                  options={carNameOptions}
+                  value={selectedCar}
+                  onChange={handleCarSelectChange}
+                  placeholder="Select Car Name"
+                  isSearchable
+                />
+              </div>
               <CustomTextField type='text' label='Number Plate' name='numberPlate' value={formData.numberPlate} onChange={handleChange} />
               <CustomTextField type='number' label='Price' name='price' value={formData.price} onChange={handleChange} />
               <CustomTextField type='text' label='Destination' name='destination' value={formData.destination} onChange={handleChange} />
               <CustomTextField type='date' label='Booking Date' name='bookingDate' value={formData.bookingDate} onChange={handleChange} minDate={currentDate} />
-              <CustomTextField type='date' label='Return Date' name='returnDate' value={formData.returnDate} onChange={handleChange} minDate={currentDate} />
+              <CustomTextField type='date' label='Return Date' name='returnDate' value={formData.returnDate} onChange={handleChange} minDate={minDate} />
             </div>
 
             <div className='flex justify-center'>

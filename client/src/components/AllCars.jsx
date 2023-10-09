@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../style';
-import Navbar from './Navbar';
 import { carimage, deletebtn, edit, carsearch, nodata, addcarcolored } from '../assets';
 import { Link, useNavigate } from 'react-router-dom';
 import iziToast from 'izitoast';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import 'izitoast/dist/css/iziToast.min.css';
+import useAnimatedLoader from "./Hooks/useAnimatedLoader"
+
 
 const AllCars = () => {
   const [searchInput, setSearchInput] = useState('');
@@ -15,14 +16,22 @@ const AllCars = () => {
   const [numberPlate, setNumberPlate] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [editCarId, setEditCarId] = useState(null);
+  const { loading, startAnimatedLoading, stopAnimatedLoading, Loader } = useAnimatedLoader();
   const navigate = useNavigate();
 
 
   const fetchData = () => {
+    startAnimatedLoading();
     fetch(`${window.react_app_url}car`)
       .then((response) => response.json())
-      .then((data) => setCars(data.data))
-      .catch((error) => console.error('Error fetching data:', error));
+      .then((data) => {
+        setCars(data.data);
+        stopAnimatedLoading();
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        stopAnimatedLoading();
+      });
   }
 
   useEffect(() => {
@@ -136,7 +145,6 @@ const AllCars = () => {
 
   return (
     <div>
-      <Navbar />
       <div className={`bg-primary`}>
         <section id="home" className={`md:flex-row flex-col ${styles.paddingY}`}>
           <div className={`${styles.flexCenter} flex-col xl:px-0 sm:px-16 pb-4`}>
@@ -156,52 +164,62 @@ const AllCars = () => {
               </div>
             </div>
           </div>
-          <div className={`${styles.flexCenter} flex-col xl:px-0 sm:px-16`}>
-            {filteredCars.length === 0 ? (
-              <div className="">
-                <img src={nodata} alt="" className='md:h-screen h-96 md:-mt-0 sm:-mt-0' />
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {filteredCars.map((car) => (
-                  <div key={car._id} className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]">
-                    <table className="text-gradient table-fixed">
-                      <tbody>
-                        <tr>
-                          <td className="px-6 py-4 flex">
-                            <img src={carimage} alt="car image" />
-                            <span className='font-bold text-lg mx-3 mt-[2px]'>{car.carName}</span>
-                          </td>
-                          <td>
-                            <div className='flex justify-end mr-2'>
-                              <button
-                                onClick={() =>
-                                  openEditModal(car._id, car.carName, car.numberPlate)
-                                }
-                                className='w-7 mr-4 cursor-pointer hover:scale-125 transition duration-300'
-                              >
-                                <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:scale-125 transition duration-300' />
-                              </button>
-                              <img
-                                src={deletebtn}
-                                alt="delete image"
-                                className="w-7 cursor-pointer hover:scale-125 transition duration-300"
-                                onClick={() => deleteCar(car._id)}
-                              />
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4">Number Plate</td>
-                          <td className="px-6 py-4">{car.numberPlate}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+          {loading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <Loader key={index} />
+              ))}
+            </div>
+          ) : (
+            <div className={`${styles.flexCenter} flex-col xl:px-0 sm:px-16`}>
+              {filteredCars.length === 0 ? (
+                <div className="">
+                  <img src={nodata} alt="" className='md:h-screen h-96 md:-mt-0 sm:-mt-0' />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {filteredCars.map((car) => (
+                    <div key={car._id} className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]">
+                      <table className="text-gradient table-fixed">
+                        <tbody>
+                          <tr>
+                            <td className="px-6 py-4 flex">
+                              <img src={carimage} alt="car image" />
+                              <span className='font-bold text-lg mx-3 mt-[2px]'>{car.carName}</span>
+                            </td>
+                            <td>
+                              <div className='flex justify-end mr-2'>
+                                <button
+                                  onClick={() =>
+                                    openEditModal(car._id, car.carName, car.numberPlate)
+                                  }
+                                  className='w-7 mr-4 cursor-pointer hover:scale-125 transition duration-300'
+                                >
+                                  <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:scale-125 transition duration-300' />
+                                </button>
+                                <img
+                                  src={deletebtn}
+                                  alt="delete image"
+                                  className="w-7 cursor-pointer hover:scale-125 transition duration-300"
+                                  onClick={() => deleteCar(car._id)}
+                                />
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="px-6 py-4">Number Plate</td>
+                            <td className="px-6 py-4"> {car.numberPlate.split('').map((char, index) => (
+                                  index > 0 && index % 10 === 0 ? <br key={index} /> : char
+                                ))}</td> 
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </section>
       </div>
 

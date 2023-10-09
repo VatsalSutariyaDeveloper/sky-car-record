@@ -6,14 +6,18 @@ import AddCarModal from './AddCarModal';
 import { ToastContainer, toast } from 'react-toastify';
 import iziToast from 'izitoast';
 import 'izitoast/dist/css/iziToast.min.css';
+import useLoader from './Hooks/useLoader';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
   const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies([]);
+  const { loading, startLoading, stopLoading, Loader } = useLoader();
+
 
   const logout = () => {
+    startLoading();
     iziToast.question({
       timeout: false,
       close: false,
@@ -53,6 +57,7 @@ const Navbar = () => {
         ],
       ],
     });
+    stopLoading();
   }
 
   const toggleMenu = () => {
@@ -65,6 +70,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-primary sticky top-0 z-50">
+      <Loader />
       <ToastContainer />
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/">
