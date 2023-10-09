@@ -4,6 +4,7 @@ const CarController = require("../controllers/CarController");
 
 router.get("/car-name", CarController.carNames);
 router.get("/number-plate/:carName", CarController.numberPlates);
+
 router.get("/", CarController.index);
 router.post("/", CarController.store);
 router.get("/:id", CarController.show);

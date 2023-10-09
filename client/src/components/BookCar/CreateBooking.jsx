@@ -88,7 +88,7 @@ const CreateBooking = () => {
         numberPlate: '',
       }));
     }
-  }, [selectedCar]);
+  }, [selectedCar]); // Only depend on selectedCar
 
 
   const handleCarSelectChange = (selectedOption) => {
@@ -100,10 +100,14 @@ const CreateBooking = () => {
       ...formData,
       [name]: value,
     });
+    if(name == 'bookingDate'){
+      setMinDate(value);
+    }
   };
 
   const resetForm = () => {
     setFormData(initialFormData);
+    setSelectedCar(null);
   };
 
   const handleSubmit = async (e) => {
@@ -129,6 +133,7 @@ const CreateBooking = () => {
       return;
     }
 
+    // Check if the return date is lower than the booking date
     const bookingDate = new Date(formData.bookingDate);
     const returnDate = new Date(formData.returnDate);
 
@@ -209,6 +214,7 @@ const CreateBooking = () => {
       console.error('Error:', error);
     }
   };
+
 
   return (
     <>

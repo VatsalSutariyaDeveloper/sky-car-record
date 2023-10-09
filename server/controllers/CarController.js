@@ -5,11 +5,12 @@ exports.index = async (req, res) => {
   try {
     const car = await Cars.find();
     res.status(200).json({
+      status: true,
       message: constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
       data: car
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
 
@@ -45,15 +46,16 @@ exports.show = async (req, res) => {
   try {
     const car = await Cars.findById(req.params.id);
     if (!car) {
-      res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
+      res.json({ status: FontFaceSetLoadEvent, message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     } else {
       res.status(200).json({
+        status: true,
         message: constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
         data: car
       });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
 
@@ -84,11 +86,12 @@ exports.update = async (req, res) => {
     const updatedCar = await existingCar.save();
 
     res.status(200).json({
+      status: true,
       message: constant.MSG_FOR_CAR_DATA_UPDATE_SUCCEESFULL,
-      data: updatedCar,
+      data: updatedCar
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
 
@@ -98,12 +101,12 @@ exports.delete = async (req, res) => {
   try {
     const deletedCar = await Cars.findByIdAndDelete(id);
     if (!deletedCar) {
-      res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
+      res.json({ status: false, message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     } else {
       res.status(200).json({ message: constant.MSG_FOR_CAR_DATA_DELETE_SUCCEESFULL });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
 
