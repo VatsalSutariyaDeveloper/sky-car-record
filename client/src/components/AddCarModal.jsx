@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { addcar, addcarcolored } from '../assets';
 import useLoader from './Hooks/useLoader';
 import axios from 'axios';
@@ -11,6 +11,17 @@ const AddCarModal = () => {
     const [carName, setCarName] = useState('');
     const [numberPlate, setNumberPlate] = useState('');
     const navigate = useNavigate();
+
+    const fetchData = () => {
+        fetch(`${window.react_app_url}car`)
+            .then((response) => response.json())
+            .then((data) => setCarName(data.data))
+            .catch((error) => console.error('Error fetching data:', error));
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
 
     const handleCarNameChange = (e) => {
         setCarName(e.target.value);
@@ -25,7 +36,7 @@ const AddCarModal = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:3000/car', { carName, numberPlate });
+            const response = await axios.post(`${window.react_app_url}car`, { carName, numberPlate });
             toast.success(response.data.message, {
                 position: 'top-right',
                 autoClose: 5000,
@@ -36,7 +47,7 @@ const AddCarModal = () => {
                 progress: undefined,
                 theme: 'dark',
             });
-
+            fetchData();
             resetForm();
             navigate('/all-cars');
         } catch (error) {

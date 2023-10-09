@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from './Navbar'
 import styles from '../style';
 import { date, deletebtn, edit, carsearch, datesearch, nodata, reset, arrowup } from '../assets';
 import '../index.css';
@@ -12,19 +13,29 @@ const Hero = () => {
   const [searchInput, setSearchInput] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [showBackToTop, setShowBackToTop] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [filteredBookings, setFilteredBookings] = useState([]);
-  const [visibleItems, setVisibleItems] = useState(2);
-  const [itemsToLoad, setItemsToLoad] = useState(2);
+  const [visibleItems, setVisibleItems] = useState(4);
+  const [itemsToLoad, setItemsToLoad] = useState(4);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('http://localhost:3000/car-booking')
+  const fetchData = () => {
+    setLoading(true);
+    fetch(`${window.react_app_url}car-booking`)
       .then((response) => response.json())
       .then((data) => {
         setBookings(data.data);
         setFilteredBookings(data.data);
+        setLoading(false);
       })
-      .catch((error) => console.error('Error fetching data:', error));
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const handleSearchInputChange = (event) => {
@@ -96,15 +107,15 @@ const Hero = () => {
 
   const performDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3000/car-booking/${id}`, {
+      await fetch(`${window.react_app_url}car-booking/${id}`, {
         method: 'DELETE',
       });
-
-      setBookings((prevBookings) => prevBookings.filter((booking) => booking._id !== id));
+      fetchData();
     } catch (error) {
       console.error('Error deleting booking:', error);
     }
   };
+
 
   const handleScroll = () => {
     if (window.scrollY >= 200) {
@@ -134,8 +145,72 @@ const Hero = () => {
     setVisibleItems(visibleItems + itemsToLoad);
   };
 
+  const LoadingAnimation = () => (
+    <div className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]">
+      <table className="text-gradient table-fixed animate-pulse">
+        <tbody>
+          <tr>
+            <td className="px-6 py-4 flex">
+              <div className="rounded-full bg-slate-700 h-10 w-10"></div>
+              <span className='font-bold text-lg mx-3 mt-[2px]'></span>
+            </td>
+            <td>
+              <div className='flex justify-end mr-2'>
+                <div className="mr-4 rounded-full bg-slate-700 h-10 w-10"></div>
+                <div className="rounded-full bg-slate-700 h-10 w-10"></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
+            <td className="px-6 py-4 border-b border-gray-300 w-[100px]">
+              <div className="w-full h-6 bg-slate-700 rounded"></div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
+            <td className="px-6 py-4 border-b border-gray-300">
+              <div className="w-full h-6 bg-slate-700 rounded"></div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
+            <td className="px-6 py-4 border-b border-gray-300">
+              <div className="w-full h-6 bg-slate-700 rounded"></div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
+            <td className="px-6 py-4 border-b border-gray-300">
+              <div className="w-full h-6 bg-slate-700 rounded"></div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
+            <td className="px-6 py-4 border-b border-gray-300">
+              <div className="w-full h-6 bg-slate-700 rounded"></div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-4 border-b border-gray-300"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
+            <td className="px-6 py-4 border-b border-gray-300">
+              <div className="w-full h-6 bg-slate-700 rounded"></div>
+            </td>
+          </tr>
+          <tr>
+            <td className="px-6 py-4"><div className="w-full h-6 bg-slate-700 rounded"></div></td>
+            <td className="px-6 py-4">
+              <div className="w-full h-6 bg-slate-700 rounded"></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+
   return (
     <>
+      <Navbar />
       <div className={`bg-primary`}>
         <section
           id="home"
@@ -168,71 +243,93 @@ const Hero = () => {
                 </div>
               </div>
             </div>
-            {visibleBookings.length === 0 ? (
-              <div className="">
-                <img src={nodata} alt="" className='md:h-screen h-96 md:-mt-0 sm:-mt-0' />
-              </div>
-            ) : (
+            {loading ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {visibleBookings.map((booking) => (
-                  <div
-                    key={booking._id}
-                    className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]"
-                  >
-                    <table className="text-gradient table-fixed">
-                      <tbody>
-                        <tr>
-                          <td className="px-6 py-4 flex">
-                            <img src={date} alt="date image" />
-                            <span className='font-bold text-lg mx-3 mt-[2px]'>{formatDate(booking.bookingDate)}</span>
-                          </td>
-                          <td>
-                            <div className='flex justify-end mr-2'>
-                              <Link to={`/update-booking/${booking._id}`}>
-                                <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:scale-125 transition duration-300' />
-                              </Link>
-                              <img
-                                src={deletebtn}
-                                alt="delete image"
-                                className="w-7 cursor-pointer hover:scale-125 transition duration-300"
-                                onClick={() => deleteBooking(booking._id)}
-                              />
-                            </div>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 border-b border-gray-300">Client Name</td>
-                          <td className="px-6 py-4 border-b border-gray-300 w-[100px]">{booking.clientName}</td>
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 border-b border-gray-300">Dealer Name</td>
-                          <td className="px-6 py-4 border-b border-gray-300">{booking.dealerName}</td>
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 border-b border-gray-300">Car name</td>
-                          <td className="px-6 py-4 border-b border-gray-300">{booking.carName}</td>
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 border-b border-gray-300">Price</td>
-                          <td className="px-6 py-4 border-b border-gray-300">₹ {booking.price}</td>
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 border-b border-gray-300">Number Plate</td>
-                          <td className="px-6 py-4 border-b border-gray-300">{booking.numberPlate}</td>
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4 border-b border-gray-300">Destination</td>
-                          <td className="px-6 py-4 border-b border-gray-300">{booking.destination}</td>
-                        </tr>
-                        <tr>
-                          <td className="px-6 py-4">Return Date</td>
-                          <td className="px-6 py-4">{formatDate(booking.returnDate)}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
+                {Array.from({ length: 4 }).map((_, index) => (
+                  <LoadingAnimation key={index} />
                 ))}
               </div>
+            ) : (
+              <>
+                {visibleBookings.length === 0 ? (
+                  <div className="">
+                    <img src={nodata} alt="" className='md:h-screen h-96 md:-mt-0 sm:-mt-0' />
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {visibleBookings.map((booking) => (
+                      <div
+                        key={booking._id}
+                        className="flex justify-center items-center px-3 bg-discount-gradient rounded-[10px]"
+                      >
+                        <table className="text-gradient table-fixed">
+                          <tbody>
+                            <tr>
+                              <td className="px-6 py-4 flex">
+                                <img src={date} alt="date image" />
+                                <span className='font-bold text-lg mx-3 mt-[2px]'>{formatDate(booking.bookingDate)}</span>
+                              </td>
+                              <td>
+                                <div className='flex justify-end mr-2'>
+                                  <Link to={`/update-booking/${booking._id}`}>
+                                    <img src={edit} alt="edit image" className='w-7 mr-4 cursor-pointer hover:scale-125 transition duration-300' />
+                                  </Link>
+                                  <img
+                                    src={deletebtn}
+                                    alt="delete image"
+                                    className="w-7 cursor-pointer hover:scale-125 transition duration-300"
+                                    onClick={() => deleteBooking(booking._id)}
+                                  />
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="px-6 py-4 border-b border-gray-300">Client Name</td>
+                              <td className="px-6 py-4 border-b border-gray-300 w-[100px]">
+                                {booking.clientName.split('').map((char, index) => (
+                                  index > 0 && index % 10 === 0 ? <br key={index} /> : char
+                                ))}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="px-6 py-4 border-b border-gray-300">Dealer Name</td>
+                              <td className="px-6 py-4 border-b border-gray-300">
+                                {booking.dealerName.split('').map((char, index) => (
+                                  index > 0 && index % 10 === 0 ? <br key={index} /> : char
+                                ))}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="px-6 py-4 border-b border-gray-300">Car name</td>
+                              <td className="px-6 py-4 border-b border-gray-300">{booking.carName}</td>
+                            </tr>
+                            <tr>
+                              <td className="px-6 py-4 border-b border-gray-300">Price</td>
+                              <td className="px-6 py-4 border-b border-gray-300">₹ {booking.price}</td>
+                            </tr>
+                            <tr>
+                              <td className="px-6 py-4 border-b border-gray-300">Number Plate</td>
+                              <td className="px-6 py-4 border-b border-gray-300">{booking.numberPlate}</td>
+                            </tr>
+                            <tr>
+                              <td className="px-6 py-4 border-b border-gray-300">Destination</td>
+                              <td className="px-6 py-4 border-b border-gray-300">
+                                {booking.destination.split('').map((char, index) => (
+                                  index > 0 && index % 10 === 0 ? <br key={index} /> : char
+                                ))}
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="px-6 py-4">Return Date</td>
+                              <td className="px-6 py-4">{formatDate(booking.returnDate)}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
             )}
           </div>
           {visibleItems < filteredBookings.length && (

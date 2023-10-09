@@ -206,3 +206,18 @@ input::-webkit-inner-spin-button {
        background-repeat:no-repeat;
       color:rgba(204,204,204,0);
 }
+
+
+.fade-loader {
+  animation: fadeInAnimation ease 0.7s;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+@keyframes fadeInAnimation {
+  0% {
+      opacity: 0;
+  }
+  100% {
+      opacity: 1;
+  }
+}

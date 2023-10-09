@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Navbar from "../Navbar"
 import '../../index.css';
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
@@ -23,7 +24,7 @@ const CreateBooking = () => {
     price: '',
     destination: '',
     bookingDate: currentDate,
-    returnDate: '',
+    returnDate: '', 
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -218,6 +219,7 @@ const CreateBooking = () => {
 
   return (
     <>
+      <Navbar />
       <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>

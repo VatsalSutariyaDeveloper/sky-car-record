@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import "../../index.css";
+import Navbar from '../Navbar';
 import CustomTextField from './CustomTextField';
 import styles from '../../style';
 import { radio } from '../../assets';
@@ -29,21 +30,10 @@ const UpdateBooking = ({ match }) => {
     returnDate: '',
   });
   useEffect(() => {
-    fetch(`http://localhost:3000/car-booking/${id}`)
+    fetch(`${window.react_app_url}car-booking/${id}`)
       .then((response) => response.json())
       .then((data) => setFormData(data.data))
-      .catch((error) =>
-        toast.error(error, {
-          position: 'top-right',
-          autoClose: 5000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        })
-      );
+      .catch((error) => console.error('Error fetching data:', error));
   }, [id]);
 
   useEffect(() => {
@@ -112,51 +102,36 @@ const UpdateBooking = ({ match }) => {
       return;
     } else {
       try {
-        const response = await axios.put(`http://localhost:3000/car-booking/${id}`, formData); // Replace with your actual API endpoint
+        const response = await axios.put(`${window.react_app_url}car-booking/${id}`, formData); // Replace with your actual API endpoint
         stopLoading();
-        if (!response.data.message) {
-          toast.error(response.data.message, {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-          });
-        }
-        else {
-          toast.success(response.data.message, {
-            position: 'top-right',
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: 'dark',
-          });
+        toast.success(response.data.message, {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
 
-          setFormData({
-            clientName: '',
-            dealerName: '',
-            carName: '',
-            numberPlate: '',
-            price: '',
-            destination: '',
-            bookingDate: '',
-            returnDate: '',
-          });
-          startLoading();
-          setTimeout(() => {
-            stopLoading();
-            navigate('/');
-          }, 1000);
-        }
+        setFormData({
+          clientName: '',
+          dealerName: '',
+          carName: '',
+          numberPlate: '',
+          price: '',
+          destination: '',
+          bookingDate: '',
+          returnDate: '',
+        });
+        startLoading();
+        setTimeout(() => {
+          stopLoading();
+          navigate('/');
+        }, 1000);
       } catch (error) {
         stopLoading();
-
         if (error.response && error.response.data) {
           toast.error(error.response.data.message, {
             position: 'top-right',
@@ -187,7 +162,8 @@ const UpdateBooking = ({ match }) => {
 
   return (
     <>
-      <ToastContainer />
+    <Navbar />
+     <ToastContainer />
       <div className={`bg-primary ${styles.flexStart}`}>
         <div className={`${styles.boxWidth}`}>
           <div className='p-3 md:p-6 flex'>
@@ -214,7 +190,7 @@ const UpdateBooking = ({ match }) => {
               <CustomTextField type="selectbox" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
               <CustomTextField type="number" label="Price" name="price" value={formData.price} onChange={handleChange} />
               <CustomTextField type="text" label="Destination" name="destination" value={formData.destination} onChange={handleChange} />
-              <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} />
+              <CustomTextField type="date" label="Booking Date" name="bookingDate" value={formData.bookingDate} onChange={handleChange} />
               <CustomTextField type="date" label="Return Date" name="returnDate" value={formData.returnDate} onChange={handleChange} minDate={new Date().toISOString().split('T')[0]} />
             </div>
             <div className='flex justify-center'>

@@ -3,7 +3,9 @@ const constant = require('../config/Constant');
 
 exports.index = async (req, res) => {
   try {
-    const carBooking = await CarBooking.find();
+    const carBooking = await CarBooking.find()
+      .sort({ createdAt: -1 }); 
+
     res.status(200).json({
       status: true,
       message: constant.MSG_FOR_GET_BOOKING_DATA_SUCCESSFULLY,
@@ -13,6 +15,7 @@ exports.index = async (req, res) => {
     res.json({ status: false, message: error.message });
   }
 };
+
 
 exports.store = async (req, res) => {
   const { clientName, dealerName, carName, numberPlate, price, destination, bookingDate, returnDate } = req.body;

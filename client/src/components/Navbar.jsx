@@ -4,27 +4,55 @@ import { close, menu } from '../assets';
 import { useCookies } from 'react-cookie'
 import AddCarModal from './AddCarModal';
 import { ToastContainer, toast } from 'react-toastify';
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const [toggle, setToggle] = useState(false);
   const location = useLocation();
   const [cookies, setCookie, removeCookie] = useCookies([]);
-  
 
   const logout = () => {
-    toast.success("Logout successfully", {
-      position: 'top-right',
-      autoClose: 5000,
-      hideProgressBar: true,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: 'dark',
+    iziToast.question({
+      timeout: false,
+      close: false,
+      overlay: true,
+      displayMode: 'once',
+      id: 'question',
+      zindex: 999,
+      title: 'Confirmation',
+      message: 'Are you sure you want to logout ?',
+      position: 'center',
+      color: 'cyan',
+      buttons: [
+        [
+          '<button><b>Yes</b></button>',
+          function (instance, toast) {
+            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+            removeCookie('jwt');
+            toast.success("Logout successfully", {
+              position: 'top-right',
+              autoClose: 5000,
+              hideProgressBar: true,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: 'dark',
+            });
+            navigate('/login')
+          },
+          true,
+        ],
+        [
+          '<button>No</button>',
+          function (instance, toast) {
+            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+          },
+        ],
+      ],
     });
-    removeCookie('jwt');
-    navigate('/login')
   }
 
   const toggleMenu = () => {
@@ -37,20 +65,22 @@ const Navbar = () => {
 
   return (
     <nav className="bg-primary sticky top-0 z-50">
-      <ToastContainer/>
+      <ToastContainer />
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/">
           <img src="logo.png" className="h-8 mr-3" alt="skycar Logo" />
         </Link>
         <div className="flex md:order-2">
-          <Link to="add-booking">
-            <button
-              type="button"
-              className="text-black bg-[#73cdd7] hover:bg-[#5fbdc7] focus:ring-4 focus:outline-none focus:ring-[#73cdd7] font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-[#73cdd7] dark:hover:bg-[#5fbdc7] dark:focus:ring-[#73cdd7]"
-            >
-              Book Car
-            </button>
-          </Link>
+          <div className='md:hidden'>
+            <NavLink to="add-booking">
+              <button
+                type="button"
+                className="text-black bg-[#73cdd7] hover:bg-[#5fbdc7] focus:ring-4 focus:outline-none focus:ring-[#73cdd7] font-medium rounded-lg text-sm px-4 py-2 text-center mr-3 md:mr-0 dark:bg-[#73cdd7] dark:hover:bg-[#5fbdc7] dark:focus:ring-[#73cdd7]"
+              >
+                Book Car
+              </button>
+            </NavLink>
+          </div>
           <AddCarModal />
           <button
             data-collapse-toggle="navbar-sticky"
@@ -88,7 +118,7 @@ const Navbar = () => {
               </NavLink>
             </li>
             <li>
-            <NavLink
+              <NavLink
                 to="/add-booking"
                 activeclassname="active"
                 className={`block py-2 pl-3 pr-4 text-[#5fbdc7] md:text-white rounded hover:bg-primary md:hover:bg-transparent md:hover:text-[#5fbdc7] md:p-2 md:px-12 ${location.pathname === '/add-booking' ? 'text-[#5fbdc7]' : ''

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import styles from '../style';
-import { carimage, deletebtn, edit, carsearch, nodata,addcarcolored  } from '../assets';
+import Navbar from './Navbar';
+import { carimage, deletebtn, edit, carsearch, nodata, addcarcolored } from '../assets';
 import { Link, useNavigate } from 'react-router-dom';
 import iziToast from 'izitoast';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'izitoast/dist/css/iziToast.min.css';
 
 const AllCars = () => {
@@ -14,11 +17,16 @@ const AllCars = () => {
   const [editCarId, setEditCarId] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fetch('http://localhost:3000/car')
+
+  const fetchData = () => {
+    fetch(`${window.react_app_url}car`)
       .then((response) => response.json())
       .then((data) => setCars(data.data))
       .catch((error) => console.error('Error fetching data:', error));
+  }
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   const handleCarNameChange = (e) => {
@@ -26,7 +34,8 @@ const AllCars = () => {
   };
 
   const handleNumberPlateChange = (e) => {
-    setNumberPlate(e.target.value);
+    const value = e.target.value.toUpperCase();
+    setNumberPlate(value);
   };
 
   const handleSearchInputChange = (event) => {
@@ -48,7 +57,7 @@ const AllCars = () => {
       title: 'Confirmation',
       message: 'Are you sure you want to delete this user?',
       position: 'center',
-      color: 'red',
+      color: 'cyan',
       buttons: [
         [
           '<button><b>Yes</b></button>',
@@ -70,7 +79,7 @@ const AllCars = () => {
 
   const performDelete = async (id) => {
     try {
-      await fetch(`http://localhost:3000/car/${id}`, {
+      await fetch(`${window.react_app_url}car/${id}`, {
         method: 'DELETE',
       });
 
@@ -89,9 +98,8 @@ const AllCars = () => {
 
   const handleUpdateCar = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await fetch(`http://localhost:3000/car/${editCarId}`, {
+      const response = await fetch(`${window.react_app_url}car/${editCarId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -100,7 +108,6 @@ const AllCars = () => {
       });
 
       if (response.ok) {
-        // Update the car in the local state
         setCars((prevCars) =>
           prevCars.map((car) =>
             car._id === editCarId
@@ -109,9 +116,10 @@ const AllCars = () => {
           )
         );
 
-        setShowModal(false);
         setCarName('');
         setNumberPlate('');
+        setShowModal(false);
+
       } else {
         console.error('Failed to update car:', response.statusText);
       }
@@ -128,6 +136,7 @@ const AllCars = () => {
 
   return (
     <div>
+      <Navbar />
       <div className={`bg-primary`}>
         <section id="home" className={`md:flex-row flex-col ${styles.paddingY}`}>
           <div className={`${styles.flexCenter} flex-col xl:px-0 sm:px-16 pb-4`}>
