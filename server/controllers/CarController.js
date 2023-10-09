@@ -6,11 +6,12 @@ exports.index = async (req, res) => {
   try {
     const car = await Cars.find();
     res.status(200).json({
-        message : constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
-        data : car
+      status: true,
+      message: constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
+      data: car
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
 
@@ -24,11 +25,12 @@ exports.store = async (req, res) => {
     });
 
     res.status(201).json({
+      status: true,
       message: constant.MSG_FOR_BOOKING_SUCCEESFULL,
       data: addCar,
     });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
 
@@ -37,36 +39,38 @@ exports.show = async (req, res) => {
   try {
     const car = await Cars.findById(req.params.id);
     if (!car) {
-      res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
+      res.json({ status: FontFaceSetLoadEvent, message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     } else {
-        res.status(200).json({
-            message : constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
-            data : car
-        });
+      res.status(200).json({
+        status: true,
+        message: constant.MSG_FOR_GET_CAR_DATA_SUCCESSFULLY,
+        data: car
+      });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
 
 exports.update = async (req, res) => {
   const { id } = req.params;
-  
+
   try {
     const updatedCar = await Cars.findByIdAndUpdate(id.trim(), req.body, {
       new: true,
     });
 
     if (!updatedCar) {
-      return res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
+      return res.json({ status: false, message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     }
 
     res.status(200).json({
-        message : constant.MSG_FOR_CAR_DATA_UPDATE_SUCCEESFULL,
-        data : updatedCar
+      status: true,
+      message: constant.MSG_FOR_CAR_DATA_UPDATE_SUCCEESFULL,
+      data: updatedCar
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
 
@@ -75,17 +79,18 @@ exports.delete = async (req, res) => {
   try {
     const deletedCar = await Cars.findByIdAndDelete(id);
     if (!deletedCar) {
-      res.status(404).json({ message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
+      res.json({ status: false, message: constant.MSG_FOR_CAR_DATA_NOT_FOUND });
     } else {
       res.status(200).json({ message: constant.MSG_FOR_CAR_DATA_DELETE_SUCCEESFULL });
     }
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.json({ status: false, message: error.message });
   }
 };
+
 exports.carNames = async (req, res) => {
   try {
-    const cars = await Car.find({}, 'carName'); 
+    const cars = await Cars.find({}, 'carName'); 
     const carNames = cars.map((car) => car.carName);
     res.status(200).json({
       status: true,
@@ -99,15 +104,24 @@ exports.carNames = async (req, res) => {
 
 exports.numberPlates = async (req, res) => {
   try {
-    const cars = await Car.find({}, 'numberPlate'); 
-    const numberPlates = cars.map((car) => car.numberPlate);
-    res.status(200).json({
-      status: true,
-      message: constant.MSG_FOR_GET_NUMBER_PLATES_SUCCESSFULLY,
-      data: numberPlates,
-    });
+    const cars = await Cars.find(req.params.carName, 'numberPlate');
+    const numberPlate = cars.length > 0 ? cars[0].numberPlate : null;
+
+    if (numberPlate) {
+      res.status(200).json({
+        status: true,
+        message: constant.MSG_FOR_GET_NUMBER_PLATES_SUCCESSFULLY,
+        data: numberPlate,
+      });   
+    } else {
+      // Handle the case where there are no matching cars     
+      res.json({
+        status: false,
+        message: constant.MSG_FOR_CAR_NOT_FOUND_AND_NUMBER_PLATE_NOT_EXIST,
+      });   
+    }
   } catch (error) {
-    resizeTo.json({ status: false, message: error.message });
+    resjson({ status: false, message: error.message });
   }
 };
 

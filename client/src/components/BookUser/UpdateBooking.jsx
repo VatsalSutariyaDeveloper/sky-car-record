@@ -8,12 +8,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import useLoader from '../Hooks/useLoader';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 
 const UpdateBooking = ({ match }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { loading, startLoading, stopLoading, Loader } = useLoader();
-
+  const [carNameOptions, setCarNameOptions] = useState([]);
+  const [selectedCar, setSelectedCar] = useState(null);
+  const [minDate,setMinDate] = useState(currentDate);
 
   const [formData, setFormData] = useState({
     clientName: '',
@@ -43,12 +46,48 @@ const UpdateBooking = ({ match }) => {
       );
   }, [id]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/car/car-name');
+        if (!response.data || !Array.isArray(response.data.data)) {
+          throw new Error('No carName options found.');
+        }
+        const options = response.data.data.map((carName) => ({
+          value: carName,
+          label: carName,
+        }));
+        setCarNameOptions(options);
+      } catch (error) {
+        console.error('Error fetching carName options:', error);
+        toast.error('Failed to fetch carName options. Please try again later.', {
+          position: 'top-right',
+          autoClose: 5000,
+          hideProgressBar: true,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleCarSelectChange = (selectedOption) => {
+    setSelectedCar(selectedOption);
+  };
+  
   const handleChange = (name, value) => {
     setFormData({
       ...formData,
       [name]: value,
     });
-
+    if(name == 'bookingDate'){
+      setMinDate(value);
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -165,7 +204,13 @@ const UpdateBooking = ({ match }) => {
             <div className="md:grid md:grid-cols-2 md:gap-2">
               <CustomTextField type="text" label="Client Name" name="clientName" value={formData.clientName} onChange={handleChange} />
               <CustomTextField type="text" label="Dealer Name" name="dealerName" value={formData.dealerName} onChange={handleChange} />
-              <CustomTextField type="selectbox" label="Car Name" name="carName" value={formData.carName} onChange={handleChange} />
+              <Select
+                options={carNameOptions}
+                value={selectedCar}
+                onChange={handleCarSelectChange}
+                placeholder="Select Car Name"
+                isSearchable
+              />
               <CustomTextField type="selectbox" label="Number Plate" name="numberPlate" value={formData.numberPlate} onChange={handleChange} />
               <CustomTextField type="number" label="Price" name="price" value={formData.price} onChange={handleChange} />
               <CustomTextField type="text" label="Destination" name="destination" value={formData.destination} onChange={handleChange} />

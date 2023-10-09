@@ -1,40 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../../index.css";
-import Select from 'react-select';
-
 
 const CustomTextField = ({ type, label, name, value, onChange, minDate }) => {
-  const [options, setOptions] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      if (name === 'carName') {
-        try {
-          const response = await fetch('http://localhost:3000/car/car-name');
-          if (!response.ok) {
-            throw new Error('Failed to fetch carName options');
-          }
-          const data = await response.json();
-          setOptions(data.data);
-        } catch (error) {
-          console.error('Error fetching carName options:', error);
-        }
-      } else if (name === 'numberPlate') {
-        try {
-          const response = await fetch('http://localhost:3000/car/number-plate');
-          if (!response.ok) {
-            throw new Error('Failed to fetch numberPlate options');
-          }
-          const data = await response.json();
-          setOptions(data.data);
-        } catch (error) {
-          console.error('Error fetching numberPlate options:', error);
-        }
-      }
-    };
-
-    fetchData();
-  }, [name]);
 
   function formatDate(dateString) {
     const date = new Date(dateString);
@@ -47,11 +14,6 @@ const CustomTextField = ({ type, label, name, value, onChange, minDate }) => {
 
   const handleInputChange = (event) => {
     const newValue = event.target.value;
-    onChange(name, newValue);
-  };
-
-  const handleSelectboxChange = (selectedOption) => {
-    const newValue = selectedOption ? selectedOption.value : null;
     onChange(name, newValue);
   };
 

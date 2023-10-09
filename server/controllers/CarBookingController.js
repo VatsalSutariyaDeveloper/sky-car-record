@@ -45,7 +45,7 @@ exports.show = async (req, res) => {
     const carBooking = await CarBooking.findById(req.params.id);
     res.status(201).json({
       status: true,
-      message: constant.MSG_FOR_BOOKING_UPDATE_SUCCEESFULL,
+      message: constant.MSG_FOR_GET_BOOKING_DATA_SUCCESSFULLY,
       data: carBooking
     });
   } catch (error) {
